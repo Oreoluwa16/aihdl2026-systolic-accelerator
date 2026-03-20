@@ -1,0 +1,9 @@
+*.vcd
+sim
+*.out
+*.blif
+*.json
+*.asc
+.DS_Store
+*~
+*.swp
