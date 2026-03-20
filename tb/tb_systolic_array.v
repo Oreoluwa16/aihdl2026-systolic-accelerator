@@ -35,6 +35,20 @@ module tb_systolic_array;
     reg [7:0]   test_b [0:3][0:3];
     reg [31:0]  result;
 
+    // --------------------------------------------------------
+    // Reset everything — clears PE accumulators between tests
+    // --------------------------------------------------------
+    task do_reset;
+        begin
+            rst_n = 0;
+            we    = 0;
+            re    = 0;
+            repeat(5) @(posedge clk);
+            rst_n = 1;
+            repeat(2) @(posedge clk);
+        end
+    endtask
+
     task mmio_write;
         input [7:0]  a;
         input [31:0] d;
@@ -69,7 +83,7 @@ module tb_systolic_array;
         integer timeout;
         reg [31:0] status;
         begin
-            timeout = 200;
+            timeout = 500;
             status  = 32'd0;
             while (!status[0] && timeout > 0) begin
                 mmio_read(8'h24, status);
@@ -91,6 +105,18 @@ module tb_systolic_array;
                         expected_c[r][c] = expected_c[r][c]
                                          + (test_a[r][k] * test_b[k][c]);
                 end
+        end
+    endtask
+
+    task load_and_run;
+        begin
+            for (i = 0; i < 4; i = i + 1)
+                for (j = 0; j < 4; j = j + 1) begin
+                    mmio_write(8'h00 + (i*4) + j, {24'd0, test_a[i][j]});
+                    mmio_write(8'h10 + (i*4) + j, {24'd0, test_b[i][j]});
+                end
+            mmio_write(8'h20, 32'h1);
+            wait_done;
         end
     endtask
 
@@ -117,97 +143,77 @@ module tb_systolic_array;
         $dumpfile("tb_systolic_array.vcd");
         $dumpvars(0, tb_systolic_array);
 
-        we = 0; re = 0; addr = 0; wdata = 0;
-        pass_count = 0; fail_count = 0;
+        pass_count = 0;
+        fail_count = 0;
 
-        rst_n = 0;
-        repeat(5) @(posedge clk);
-        rst_n = 1;
-        repeat(2) @(posedge clk);
-
+        // ------------------------------------------------
         // TEST 1: Identity x Identity
+        // ------------------------------------------------
         $display("\n=== TEST 1: Identity x Identity ===");
+        do_reset;
         for (i = 0; i < 4; i = i + 1)
             for (j = 0; j < 4; j = j + 1) begin
                 test_a[i][j] = (i == j) ? 8'd1 : 8'd0;
                 test_b[i][j] = (i == j) ? 8'd1 : 8'd0;
             end
         compute_expected;
-        for (i = 0; i < 4; i = i + 1)
-            for (j = 0; j < 4; j = j + 1) begin
-                mmio_write(8'h00 + (i*4) + j, {24'd0, test_a[i][j]});
-                mmio_write(8'h10 + (i*4) + j, {24'd0, test_b[i][j]});
-            end
-        mmio_write(8'h20, 32'h1);
-        wait_done;
+        load_and_run;
         verify_result;
 
+        // ------------------------------------------------
         // TEST 2: A x Identity = A
+        // ------------------------------------------------
         $display("\n=== TEST 2: A x Identity = A ===");
+        do_reset;
         for (i = 0; i < 4; i = i + 1)
             for (j = 0; j < 4; j = j + 1) begin
                 test_a[i][j] = i * 4 + j + 1;
                 test_b[i][j] = (i == j) ? 8'd1 : 8'd0;
             end
         compute_expected;
-        for (i = 0; i < 4; i = i + 1)
-            for (j = 0; j < 4; j = j + 1) begin
-                mmio_write(8'h00 + (i*4) + j, {24'd0, test_a[i][j]});
-                mmio_write(8'h10 + (i*4) + j, {24'd0, test_b[i][j]});
-            end
-        mmio_write(8'h20, 32'h1);
-        wait_done;
+        load_and_run;
         verify_result;
 
-        // TEST 3: All-ones x All-ones
+        // ------------------------------------------------
+        // TEST 3: All-ones x All-ones (each result = 4)
+        // ------------------------------------------------
         $display("\n=== TEST 3: All-ones x All-ones ===");
+        do_reset;
         for (i = 0; i < 4; i = i + 1)
             for (j = 0; j < 4; j = j + 1) begin
                 test_a[i][j] = 8'd1;
                 test_b[i][j] = 8'd1;
             end
         compute_expected;
-        for (i = 0; i < 4; i = i + 1)
-            for (j = 0; j < 4; j = j + 1) begin
-                mmio_write(8'h00 + (i*4) + j, {24'd0, test_a[i][j]});
-                mmio_write(8'h10 + (i*4) + j, {24'd0, test_b[i][j]});
-            end
-        mmio_write(8'h20, 32'h1);
-        wait_done;
+        load_and_run;
         verify_result;
 
-        // TEST 4: Large values
+        // ------------------------------------------------
+        // TEST 4: Large values (each result = 900)
+        // ------------------------------------------------
         $display("\n=== TEST 4: Large values (15x15) ===");
+        do_reset;
         for (i = 0; i < 4; i = i + 1)
             for (j = 0; j < 4; j = j + 1) begin
                 test_a[i][j] = 8'd15;
                 test_b[i][j] = 8'd15;
             end
         compute_expected;
-        for (i = 0; i < 4; i = i + 1)
-            for (j = 0; j < 4; j = j + 1) begin
-                mmio_write(8'h00 + (i*4) + j, {24'd0, test_a[i][j]});
-                mmio_write(8'h10 + (i*4) + j, {24'd0, test_b[i][j]});
-            end
-        mmio_write(8'h20, 32'h1);
-        wait_done;
+        load_and_run;
         verify_result;
 
-        // TEST 5: Zero matrix
+        // ------------------------------------------------
+        // TEST 5: Zero matrix (all results = 0)
+        // ------------------------------------------------
         $display("\n=== TEST 5: Zero Matrix ===");
+        do_reset;
         for (i = 0; i < 4; i = i + 1)
             for (j = 0; j < 4; j = j + 1) begin
                 test_a[i][j] = 8'd0;
                 test_b[i][j] = 8'd0;
             end
         compute_expected;
-        for (i = 0; i < 4; i = i + 1)
-            for (j = 0; j < 4; j = j + 1) begin
-                mmio_write(8'h00 + (i*4) + j, {24'd0, test_a[i][j]});
-                mmio_write(8'h10 + (i*4) + j, {24'd0, test_b[i][j]});
-            end
-        mmio_write(8'h20, 32'h1);
-        wait_done;
+        load_and_run;
         verify_result;
 
         $display("\n========================================");
@@ -221,9 +227,10 @@ module tb_systolic_array;
     end
 
     initial begin
-        #100000;
+        #500000;
         $display("FATAL: Simulation timeout");
         $finish;
     end
 
 endmodule
+

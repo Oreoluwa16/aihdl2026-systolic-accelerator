@@ -1,9 +1,3 @@
-// =============================================================================
-// AI Accelerator: 4x4 Systolic Array MAC Unit
-// Module: systolic_array
-// Competition: AI-HDL 2026 - Design Phase 1
-// =============================================================================
-
 `timescale 1ns / 1ps
 
 module pe (
@@ -45,6 +39,7 @@ module systolic_array (
     reg [7:0]  mat_b [0:3][0:3];
     reg [31:0] mat_c [0:3][0:3];
 
+    // ctrl_start only driven by write block — fixes dual-driver bug
     reg        ctrl_start;
     reg        ctrl_reset_acc;
     reg        status_done;
@@ -56,6 +51,7 @@ module systolic_array (
 
     reg         pe_en;
     reg  [2:0]  step_cnt;
+    reg  [3:0]  drain_cnt;
     reg  [7:0]  a_feed [0:3];
     reg  [7:0]  b_feed [0:3];
 
@@ -91,10 +87,11 @@ module systolic_array (
     localparam S_DONE = 2'd3;
 
     reg [1:0] state;
-    reg [3:0] drain_cnt;
-
     integer i, j;
 
+    // -------------------------------------------------------
+    // FSM — does NOT drive ctrl_start (read only)
+    // -------------------------------------------------------
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             state       <= S_IDLE;
@@ -103,14 +100,11 @@ module systolic_array (
             drain_cnt   <= 4'd0;
             status_done <= 1'b0;
             status_busy <= 1'b0;
-            ctrl_start  <= 1'b0;
             for (i = 0; i < 4; i = i + 1) begin
                 a_feed[i] <= 8'd0;
                 b_feed[i] <= 8'd0;
             end
         end else begin
-            ctrl_start <= 1'b0;
-
             case (state)
                 S_IDLE: begin
                     status_done <= 1'b0;
@@ -135,7 +129,6 @@ module systolic_array (
                         else
                             b_feed[j] <= 8'd0;
                     end
-
                     if (step_cnt == 3'd6) begin
                         state     <= S_WAIT;
                         drain_cnt <= 4'd4;
@@ -147,7 +140,6 @@ module systolic_array (
                 S_WAIT: begin
                     for (i = 0; i < 4; i = i + 1) a_feed[i] <= 8'd0;
                     for (j = 0; j < 4; j = j + 1) b_feed[j] <= 8'd0;
-
                     if (drain_cnt == 4'd0) begin
                         pe_en <= 1'b0;
                         for (i = 0; i < 4; i = i + 1)
@@ -164,7 +156,7 @@ module systolic_array (
                 S_DONE: begin
                     if (ctrl_start) begin
                         status_done <= 1'b0;
-                        state <= S_IDLE;
+                        state       <= S_IDLE;
                     end
                 end
 
@@ -175,26 +167,36 @@ module systolic_array (
 
     assign irq = status_done;
 
+    // -------------------------------------------------------
+    // Write block — sole driver of ctrl_start (auto-clears)
+    // -------------------------------------------------------
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
+            ctrl_start     <= 1'b0;
+            ctrl_reset_acc <= 1'b0;
             for (i = 0; i < 4; i = i + 1)
                 for (j = 0; j < 4; j = j + 1) begin
                     mat_a[i][j] <= 8'd0;
                     mat_b[i][j] <= 8'd0;
                 end
-            ctrl_reset_acc <= 1'b0;
-        end else if (we) begin
-            if (addr < 8'h10)
-                mat_a[addr[3:2]][addr[1:0]] <= wdata[7:0];
-            else if (addr >= 8'h10 && addr < 8'h20)
-                mat_b[addr[3:2]][addr[1:0]] <= wdata[7:0];
-            else if (addr == 8'h20) begin
-                ctrl_start     <= wdata[0];
-                ctrl_reset_acc <= wdata[1];
+        end else begin
+            ctrl_start <= 1'b0;  // auto-clear every cycle
+            if (we) begin
+                if (addr < 8'h10)
+                    mat_a[addr[3:2]][addr[1:0]] <= wdata[7:0];
+                else if (addr >= 8'h10 && addr < 8'h20)
+                    mat_b[addr[3:2]][addr[1:0]] <= wdata[7:0];
+                else if (addr == 8'h20) begin
+                    ctrl_start     <= wdata[0];  // set for exactly one cycle
+                    ctrl_reset_acc <= wdata[1];
+                end
             end
         end
     end
 
+    // -------------------------------------------------------
+    // Read block
+    // -------------------------------------------------------
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             rdata <= 32'd0;
@@ -211,7 +213,8 @@ module systolic_array (
                 else if (addr == 8'h24)
                     rdata <= {30'd0, status_busy, status_done};
                 else if (addr >= 8'h28 && addr < 8'h68)
-                    rdata <= mat_c[(addr - 8'h28) >> 4][((addr - 8'h28) >> 2) & 2'b11];
+                    rdata <= mat_c[(addr - 8'h28) >> 4]
+                                  [((addr - 8'h28) >> 2) & 2'b11];
                 else
                     rdata <= 32'hDEADBEEF;
             end
