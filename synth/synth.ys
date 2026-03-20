@@ -1,0 +1,5 @@
+read_verilog ../rtl/systolic_array.v
+hierarchy -check -top systolic_array
+proc; opt; fsm; opt; memory; opt
+synth -top systolic_array
+tee -o synth_report.txt stat
