@@ -1,0 +1,7 @@
+read_verilog ../rtl/systolic_array.v
+read_verilog ../rtl/peripheral_decoder.v
+read_verilog ../rtl/systolic_accel_top.v
+hierarchy -check -top systolic_accel_top
+proc; opt; fsm; opt; memory; opt
+synth -top systolic_accel_top
+tee -o synth_top_report.txt stat
