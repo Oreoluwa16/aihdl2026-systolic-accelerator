@@ -1,0 +1,2565 @@
+
+ /----------------------------------------------------------------------------\
+ |                                                                            |
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |                                                                            |
+ |  Copyright (C) 2012 - 2019  Clifford Wolf <clifford@clifford.at>           |
+ |                                                                            |
+ |  Permission to use, copy, modify, and/or distribute this software for any  |
+ |  purpose with or without fee is hereby granted, provided that the above    |
+ |  copyright notice and this permission notice appear in all copies.         |
+ |                                                                            |
+ |  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES  |
+ |  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF          |
+ |  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR   |
+ |  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    |
+ |  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     |
+ |  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   |
+ |  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            |
+ |                                                                            |
+ \----------------------------------------------------------------------------/
+
+ Yosys 0.9 (git sha1 1979e0b)
+
+
+-- Executing script file `synth_top.ys' --
+
+1. Executing Verilog-2005 frontend: ../rtl/systolic_array.v
+Parsing Verilog input from `../rtl/systolic_array.v' to AST representation.
+Generating RTLIL representation for module `\pe'.
+Generating RTLIL representation for module `\systolic_array'.
+Warning: Replacing memory \mat_b with list of registers. See ../rtl/systolic_array.v:218
+Warning: Replacing memory \mat_a with list of registers. See ../rtl/systolic_array.v:217
+Warning: Replacing memory \mat_c with list of registers. See ../rtl/systolic_array.v:185
+Warning: Replacing memory \b_feed with list of registers. See ../rtl/systolic_array.v:143
+Warning: Replacing memory \a_feed with list of registers. See ../rtl/systolic_array.v:142
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: ../rtl/peripheral_decoder.v
+Parsing Verilog input from `../rtl/peripheral_decoder.v' to AST representation.
+Generating RTLIL representation for module `\peripheral_decoder'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: ../rtl/systolic_accel_top.v
+Parsing Verilog input from `../rtl/systolic_accel_top.v' to AST representation.
+Generating RTLIL representation for module `\systolic_accel_top'.
+Successfully finished Verilog frontend.
+
+4. Executing HIERARCHY pass (managing design hierarchy).
+
+4.1. Analyzing design hierarchy..
+Top module:  \systolic_accel_top
+Used module:     \systolic_array
+Used module:         \pe
+Used module:     \peripheral_decoder
+
+4.2. Executing AST frontend in derive mode using pre-parsed AST for module `\peripheral_decoder'.
+Parameter \PERIPH_BASE = 805306368
+Generating RTLIL representation for module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+
+4.3. Analyzing design hierarchy..
+Top module:  \systolic_accel_top
+Used module:     \systolic_array
+Used module:         \pe
+Used module:     $paramod\peripheral_decoder\PERIPH_BASE=805306368
+
+4.4. Analyzing design hierarchy..
+Top module:  \systolic_accel_top
+Used module:     \systolic_array
+Used module:         \pe
+Used module:     $paramod\peripheral_decoder\PERIPH_BASE=805306368
+Removing unused module `\peripheral_decoder'.
+Removed 1 unused modules.
+
+5. Executing PROC pass (convert processes to netlists).
+
+5.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+5.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 2 switch rules as full_case in process $proc$../rtl/peripheral_decoder.v:28$308 in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Removed 3 dead cases from process $proc$../rtl/systolic_array.v:238$239 in module systolic_array.
+Marked 10 switch rules as full_case in process $proc$../rtl/systolic_array.v:238$239 in module systolic_array.
+Marked 6 switch rules as full_case in process $proc$../rtl/systolic_array.v:211$210 in module systolic_array.
+Removed 9 dead cases from process $proc$../rtl/systolic_array.v:133$80 in module systolic_array.
+Marked 20 switch rules as full_case in process $proc$../rtl/systolic_array.v:133$80 in module systolic_array.
+Marked 1 switch rules as full_case in process $proc$../rtl/systolic_array.v:47$4 in module pe.
+Marked 2 switch rules as full_case in process $proc$../rtl/systolic_array.v:25$1 in module pe.
+Removed a total of 12 dead cases.
+
+5.3. Executing PROC_INIT pass (extract init attributes).
+
+5.4. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \rst_n in `$paramod\peripheral_decoder\PERIPH_BASE=805306368.$proc$../rtl/peripheral_decoder.v:28$308'.
+Found async reset \rst_n in `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+Found async reset \rst_n in `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+Found async reset \rst_n in `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+Found async reset \rst_n in `\pe.$proc$../rtl/systolic_array.v:47$4'.
+Found async reset \rst_n in `\pe.$proc$../rtl/systolic_array.v:25$1'.
+
+5.5. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `$paramod\peripheral_decoder\PERIPH_BASE=805306368.$proc$../rtl/peripheral_decoder.v:28$308'.
+     1/2: $0\bus_ack[0:0]
+     2/2: $0\bus_rdata[31:0]
+Creating decoders for process `\systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+     1/8: $0\b_wire[3][7:0]
+     2/8: $0\a_wire[15][7:0]
+     3/8: $0\b_wire[2][7:0]
+     4/8: $0\a_wire[10][7:0]
+     5/8: $0\b_wire[1][7:0]
+     6/8: $0\a_wire[5][7:0]
+     7/8: $0\b_wire[0][7:0]
+     8/8: $0\a_wire[0][7:0]
+Creating decoders for process `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+     1/39: $8$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA[31:0]$298
+     2/39: $7$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA[31:0]$290
+     3/39: $7$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_ADDR[3:0]$289
+     4/39: $6$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA[31:0]$285
+     5/39: $6$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_ADDR[3:0]$284
+     6/39: $5$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA[31:0]$282
+     7/39: $5$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_ADDR[3:0]$281
+     8/39: $5$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_DATA[7:0]$279
+     9/39: $4$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_DATA[7:0]$274
+    10/39: $4$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_ADDR[3:0]$273
+    11/39: $4$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA[31:0]$276
+    12/39: $4$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_ADDR[3:0]$275
+    13/39: $4$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_DATA[7:0]$269
+    14/39: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_DATA[7:0]$262
+    15/39: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_ADDR[3:0]$261
+    16/39: $3$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA[31:0]$266
+    17/39: $3$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_ADDR[3:0]$265
+    18/39: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_DATA[7:0]$264
+    19/39: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_ADDR[3:0]$263
+    20/39: $2$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA[31:0]$259
+    21/39: $2$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_ADDR[3:0]$258
+    22/39: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_DATA[7:0]$257
+    23/39: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_ADDR[3:0]$256
+    24/39: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_DATA[7:0]$255
+    25/39: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_ADDR[3:0]$254
+    26/39: $1$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA[31:0]$252
+    27/39: $1$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_ADDR[3:0]$251
+    28/39: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_DATA[7:0]$250
+    29/39: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_ADDR[3:0]$249
+    30/39: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_DATA[7:0]$248
+    31/39: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_ADDR[3:0]$247
+    32/39: $0$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA[31:0]$245
+    33/39: $0$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_ADDR[3:0]$244
+    34/39: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_DATA[7:0]$243
+    35/39: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_ADDR[3:0]$242
+    36/39: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_DATA[7:0]$241
+    37/39: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_ADDR[3:0]$240
+    38/39: $0\ack[0:0]
+    39/39: $0\rdata[31:0]
+Creating decoders for process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+     1/56: $4$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_ADDR[3:0]$234
+     2/56: $4$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_DATA[7:0]$235
+     3/56: $3$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_ADDR[3:0]$225
+     4/56: $3$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_DATA[7:0]$226
+     5/56: $3$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_DATA[7:0]$228
+     6/56: $3$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_ADDR[3:0]$227
+     7/56: $2$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_DATA[7:0]$223
+     8/56: $2$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_ADDR[3:0]$222
+     9/56: $2$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_DATA[7:0]$221
+    10/56: $2$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_ADDR[3:0]$220
+    11/56: $1$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_DATA[7:0]$219
+    12/56: $1$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_ADDR[3:0]$218
+    13/56: $1$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_DATA[7:0]$217
+    14/56: $1$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_ADDR[3:0]$216
+    15/56: $5\j[31:0]
+    16/56: $5\i[31:0]
+    17/56: $0$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_DATA[7:0]$214
+    18/56: $0$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_ADDR[3:0]$213
+    19/56: $0$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_DATA[7:0]$212
+    20/56: $0$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_ADDR[3:0]$211
+    21/56: $4\j[31:0]
+    22/56: $4\i[31:0]
+    23/56: $0\mat_b[15][7:0]
+    24/56: $0\mat_b[14][7:0]
+    25/56: $0\mat_b[13][7:0]
+    26/56: $0\mat_b[12][7:0]
+    27/56: $0\mat_b[11][7:0]
+    28/56: $0\mat_b[10][7:0]
+    29/56: $0\mat_b[9][7:0]
+    30/56: $0\mat_b[8][7:0]
+    31/56: $0\mat_b[7][7:0]
+    32/56: $0\mat_b[6][7:0]
+    33/56: $0\mat_b[5][7:0]
+    34/56: $0\mat_b[4][7:0]
+    35/56: $0\mat_b[3][7:0]
+    36/56: $0\mat_b[2][7:0]
+    37/56: $0\mat_b[1][7:0]
+    38/56: $0\mat_b[0][7:0]
+    39/56: $0\mat_a[15][7:0]
+    40/56: $0\mat_a[14][7:0]
+    41/56: $0\mat_a[13][7:0]
+    42/56: $0\mat_a[12][7:0]
+    43/56: $0\mat_a[11][7:0]
+    44/56: $0\mat_a[10][7:0]
+    45/56: $0\mat_a[9][7:0]
+    46/56: $0\mat_a[8][7:0]
+    47/56: $0\mat_a[7][7:0]
+    48/56: $0\mat_a[6][7:0]
+    49/56: $0\mat_a[5][7:0]
+    50/56: $0\mat_a[4][7:0]
+    51/56: $0\mat_a[3][7:0]
+    52/56: $0\mat_a[2][7:0]
+    53/56: $0\mat_a[1][7:0]
+    54/56: $0\mat_a[0][7:0]
+    55/56: $0\ctrl_reset_acc[0:0]
+    56/56: $0\ctrl_start[0:0]
+Creating decoders for process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+     1/110: $3\i[31:0]
+     2/110: $3\j[31:0]
+     3/110: $4$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_DATA[7:0]$205
+     4/110: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_DATA[7:0]$201
+     5/110: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_ADDR[3:0]$200
+     6/110: $4$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_DATA[7:0]$195
+     7/110: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_DATA[7:0]$191
+     8/110: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_ADDR[3:0]$190
+     9/110: $4$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_DATA[7:0]$185
+    10/110: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_DATA[7:0]$181
+    11/110: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_ADDR[3:0]$180
+    12/110: $4$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_DATA[7:0]$175
+    13/110: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_DATA[7:0]$171
+    14/110: $3$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_ADDR[3:0]$170
+    15/110: $4$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_DATA[7:0]$165
+    16/110: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_DATA[7:0]$162
+    17/110: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_ADDR[3:0]$161
+    18/110: $4$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_DATA[7:0]$156
+    19/110: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_DATA[7:0]$153
+    20/110: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_ADDR[3:0]$152
+    21/110: $4$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_DATA[7:0]$147
+    22/110: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_DATA[7:0]$144
+    23/110: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_ADDR[3:0]$143
+    24/110: $4$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_DATA[7:0]$138
+    25/110: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_DATA[7:0]$135
+    26/110: $3$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_ADDR[3:0]$134
+    27/110: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_DATA[7:0]$129
+    28/110: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_ADDR[3:0]$128
+    29/110: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_DATA[7:0]$127
+    30/110: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_ADDR[3:0]$126
+    31/110: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_DATA[7:0]$125
+    32/110: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_ADDR[3:0]$124
+    33/110: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_DATA[7:0]$123
+    34/110: $2$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_ADDR[3:0]$122
+    35/110: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_DATA[7:0]$121
+    36/110: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_ADDR[3:0]$120
+    37/110: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_DATA[7:0]$119
+    38/110: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_ADDR[3:0]$118
+    39/110: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_DATA[7:0]$117
+    40/110: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_ADDR[3:0]$116
+    41/110: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_DATA[7:0]$115
+    42/110: $2$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_ADDR[3:0]$114
+    43/110: $2\j[31:0]
+    44/110: $2\i[31:0]
+    45/110: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_DATA[7:0]$113
+    46/110: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_ADDR[3:0]$112
+    47/110: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_DATA[7:0]$111
+    48/110: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_ADDR[3:0]$110
+    49/110: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_DATA[7:0]$109
+    50/110: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_ADDR[3:0]$108
+    51/110: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_DATA[7:0]$107
+    52/110: $1$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_ADDR[3:0]$106
+    53/110: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_DATA[7:0]$105
+    54/110: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_ADDR[3:0]$104
+    55/110: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_DATA[7:0]$103
+    56/110: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_ADDR[3:0]$102
+    57/110: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_DATA[7:0]$101
+    58/110: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_ADDR[3:0]$100
+    59/110: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_DATA[7:0]$99
+    60/110: $1$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_ADDR[3:0]$98
+    61/110: $1\j[31:0]
+    62/110: $1\i[31:0]
+    63/110: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_DATA[7:0]$96
+    64/110: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_ADDR[3:0]$95
+    65/110: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_DATA[7:0]$94
+    66/110: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_ADDR[3:0]$93
+    67/110: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_DATA[7:0]$92
+    68/110: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_ADDR[3:0]$91
+    69/110: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_DATA[7:0]$90
+    70/110: $0$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_ADDR[3:0]$89
+    71/110: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_DATA[7:0]$88
+    72/110: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_ADDR[3:0]$87
+    73/110: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_DATA[7:0]$86
+    74/110: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_ADDR[3:0]$85
+    75/110: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_DATA[7:0]$84
+    76/110: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_ADDR[3:0]$83
+    77/110: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_DATA[7:0]$82
+    78/110: $0$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_ADDR[3:0]$81
+    79/110: $0\j[31:0]
+    80/110: $0\i[31:0]
+    81/110: $0\mat_c[15][31:0]
+    82/110: $0\mat_c[14][31:0]
+    83/110: $0\mat_c[13][31:0]
+    84/110: $0\mat_c[12][31:0]
+    85/110: $0\mat_c[11][31:0]
+    86/110: $0\mat_c[10][31:0]
+    87/110: $0\mat_c[9][31:0]
+    88/110: $0\mat_c[8][31:0]
+    89/110: $0\mat_c[7][31:0]
+    90/110: $0\mat_c[6][31:0]
+    91/110: $0\mat_c[5][31:0]
+    92/110: $0\mat_c[4][31:0]
+    93/110: $0\mat_c[3][31:0]
+    94/110: $0\mat_c[2][31:0]
+    95/110: $0\mat_c[1][31:0]
+    96/110: $0\mat_c[0][31:0]
+    97/110: $0\b_feed[3][7:0]
+    98/110: $0\b_feed[2][7:0]
+    99/110: $0\b_feed[1][7:0]
+   100/110: $0\b_feed[0][7:0]
+   101/110: $0\a_feed[3][7:0]
+   102/110: $0\a_feed[2][7:0]
+   103/110: $0\a_feed[1][7:0]
+   104/110: $0\a_feed[0][7:0]
+   105/110: $0\state[1:0]
+   106/110: $0\drain_cnt[3:0]
+   107/110: $0\step_cnt[2:0]
+   108/110: $0\pe_en[0:0]
+   109/110: $0\status_busy[0:0]
+   110/110: $0\status_done[0:0]
+Creating decoders for process `\pe.$proc$../rtl/systolic_array.v:47$4'.
+     1/1: $0\acc[31:0]
+Creating decoders for process `\pe.$proc$../rtl/systolic_array.v:25$1'.
+     1/6: $0\en_pipe[0:0]
+     2/6: $0\b_pipe[7:0]
+     3/6: $0\a_pipe[7:0]
+     4/6: $0\a_out[7:0]
+     5/6: $0\mul_reg[15:0]
+     6/6: $0\b_out[7:0]
+
+5.6. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `\systolic_array.\a_wire[0]' from process `\systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+No latch inferred for signal `\systolic_array.\a_wire[5]' from process `\systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+No latch inferred for signal `\systolic_array.\a_wire[10]' from process `\systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+No latch inferred for signal `\systolic_array.\a_wire[15]' from process `\systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+No latch inferred for signal `\systolic_array.\b_wire[0]' from process `\systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+No latch inferred for signal `\systolic_array.\b_wire[1]' from process `\systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+No latch inferred for signal `\systolic_array.\b_wire[2]' from process `\systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+No latch inferred for signal `\systolic_array.\b_wire[3]' from process `\systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+
+5.7. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `$paramod\peripheral_decoder\PERIPH_BASE=805306368.\bus_rdata' using process `$paramod\peripheral_decoder\PERIPH_BASE=805306368.$proc$../rtl/peripheral_decoder.v:28$308'.
+  created $adff cell `$procdff$1856' with positive edge clock and negative level reset.
+Creating register for signal `$paramod\peripheral_decoder\PERIPH_BASE=805306368.\bus_ack' using process `$paramod\peripheral_decoder\PERIPH_BASE=805306368.$proc$../rtl/peripheral_decoder.v:28$308'.
+  created $adff cell `$procdff$1857' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\rdata' using process `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+  created $adff cell `$procdff$1858' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\ack' using process `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+  created $adff cell `$procdff$1859' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+  created $adff cell `$procdff$1860' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:246$77_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+  created $adff cell `$procdff$1861' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+  created $adff cell `$procdff$1862' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:248$78_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+  created $adff cell `$procdff$1863' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+  created $adff cell `$procdff$1864' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_c$../rtl/systolic_array.v:255$79_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+  created $adff cell `$procdff$1865' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\ctrl_start' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1866' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\ctrl_reset_acc' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1867' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\i' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1868' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\j' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1869' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[0]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1870' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[1]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1871' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[2]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1872' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[3]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1873' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[4]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1874' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[5]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1875' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[6]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1876' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[7]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1877' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[8]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1878' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[9]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1879' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[10]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1880' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[11]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1881' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[12]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1882' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[13]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1883' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[14]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1884' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_a[15]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1885' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[0]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1886' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[1]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1887' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[2]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1888' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[3]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1889' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[4]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1890' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[5]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1891' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[6]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1892' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[7]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1893' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[8]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1894' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[9]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1895' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[10]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1896' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[11]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1897' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[12]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1898' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[13]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1899' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[14]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1900' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_b[15]' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1901' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1902' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_wr$\mat_a$../rtl/systolic_array.v:224$75_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1903' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1904' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_wr$\mat_b$../rtl/systolic_array.v:226$76_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+  created $adff cell `$procdff$1905' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\status_done' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1906' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\status_busy' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1907' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\pe_en' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1908' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\step_cnt' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1909' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\drain_cnt' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1910' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\state' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1911' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\i' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1912' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\j' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1913' with positive edge clock.
+Creating register for signal `\systolic_array.\a_feed[0]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1914' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\a_feed[1]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1915' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\a_feed[2]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1916' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\a_feed[3]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1917' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\b_feed[0]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1918' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\b_feed[1]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1919' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\b_feed[2]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1920' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\b_feed[3]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1921' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.\mat_c[0]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1922' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[1]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1923' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[2]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1924' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[3]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1925' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[4]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1926' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[5]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1927' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[6]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1928' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[7]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1929' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[8]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1930' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[9]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1931' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[10]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1932' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[11]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1933' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[12]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1934' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[13]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1935' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[14]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1936' with positive edge clock.
+Creating register for signal `\systolic_array.\mat_c[15]' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $dff cell `$procdff$1937' with positive edge clock.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1938' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$67_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1939' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1940' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$68_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1941' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1942' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$69_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1943' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1944' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_a$../rtl/systolic_array.v:160$70_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1945' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1946' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$71_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1947' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1948' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$72_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1949' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1950' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$73_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1951' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_ADDR' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1952' with positive edge clock and negative level reset.
+Creating register for signal `\systolic_array.$mem2reg_rd$\mat_b$../rtl/systolic_array.v:166$74_DATA' using process `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+  created $adff cell `$procdff$1953' with positive edge clock and negative level reset.
+Creating register for signal `\pe.\acc' using process `\pe.$proc$../rtl/systolic_array.v:47$4'.
+  created $adff cell `$procdff$1954' with positive edge clock and negative level reset.
+Creating register for signal `\pe.\b_out' using process `\pe.$proc$../rtl/systolic_array.v:25$1'.
+  created $adff cell `$procdff$1955' with positive edge clock and negative level reset.
+Creating register for signal `\pe.\mul_reg' using process `\pe.$proc$../rtl/systolic_array.v:25$1'.
+  created $adff cell `$procdff$1956' with positive edge clock and negative level reset.
+Creating register for signal `\pe.\a_out' using process `\pe.$proc$../rtl/systolic_array.v:25$1'.
+  created $adff cell `$procdff$1957' with positive edge clock and negative level reset.
+Creating register for signal `\pe.\a_pipe' using process `\pe.$proc$../rtl/systolic_array.v:25$1'.
+  created $adff cell `$procdff$1958' with positive edge clock and negative level reset.
+Creating register for signal `\pe.\b_pipe' using process `\pe.$proc$../rtl/systolic_array.v:25$1'.
+  created $adff cell `$procdff$1959' with positive edge clock and negative level reset.
+Creating register for signal `\pe.\en_pipe' using process `\pe.$proc$../rtl/systolic_array.v:25$1'.
+  created $adff cell `$procdff$1960' with positive edge clock and negative level reset.
+
+5.8. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 1 empty switch in `$paramod\peripheral_decoder\PERIPH_BASE=805306368.$proc$../rtl/peripheral_decoder.v:28$308'.
+Removing empty process `$paramod\peripheral_decoder\PERIPH_BASE=805306368.$proc$../rtl/peripheral_decoder.v:28$308'.
+Removing empty process `systolic_array.$proc$../rtl/systolic_array.v:64$299'.
+Found and cleaned up 9 empty switches in `\systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+Removing empty process `systolic_array.$proc$../rtl/systolic_array.v:238$239'.
+Found and cleaned up 6 empty switches in `\systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+Removing empty process `systolic_array.$proc$../rtl/systolic_array.v:211$210'.
+Found and cleaned up 21 empty switches in `\systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+Removing empty process `systolic_array.$proc$../rtl/systolic_array.v:133$80'.
+Found and cleaned up 1 empty switch in `\pe.$proc$../rtl/systolic_array.v:47$4'.
+Removing empty process `pe.$proc$../rtl/systolic_array.v:47$4'.
+Found and cleaned up 1 empty switch in `\pe.$proc$../rtl/systolic_array.v:25$1'.
+Removing empty process `pe.$proc$../rtl/systolic_array.v:25$1'.
+Cleaned up 39 empty switches.
+
+6. Executing OPT pass (performing simple optimizations).
+
+6.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module systolic_accel_top.
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module systolic_array.
+<suppressed ~63 debug messages>
+Optimizing module pe.
+
+6.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\systolic_array'.
+<suppressed ~741 debug messages>
+Finding identical cells in module `\pe'.
+<suppressed ~3 debug messages>
+Removed a total of 248 cells.
+
+6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+    dead port 1/5 on $pmux $procmux$1572.
+    dead port 2/5 on $pmux $procmux$1572.
+    dead port 3/5 on $pmux $procmux$1572.
+    dead port 4/5 on $pmux $procmux$1572.
+    dead port 5/5 on $pmux $procmux$1572.
+    dead port 1/5 on $pmux $procmux$1567.
+    dead port 2/5 on $pmux $procmux$1567.
+    dead port 3/5 on $pmux $procmux$1567.
+    dead port 4/5 on $pmux $procmux$1567.
+    dead port 5/5 on $pmux $procmux$1567.
+    dead port 1/5 on $pmux $procmux$1562.
+    dead port 2/5 on $pmux $procmux$1562.
+    dead port 3/5 on $pmux $procmux$1562.
+    dead port 4/5 on $pmux $procmux$1562.
+    dead port 5/5 on $pmux $procmux$1562.
+    dead port 1/5 on $pmux $procmux$1557.
+    dead port 2/5 on $pmux $procmux$1557.
+    dead port 3/5 on $pmux $procmux$1557.
+    dead port 4/5 on $pmux $procmux$1557.
+    dead port 5/5 on $pmux $procmux$1557.
+    dead port 1/5 on $pmux $procmux$1552.
+    dead port 2/5 on $pmux $procmux$1552.
+    dead port 3/5 on $pmux $procmux$1552.
+    dead port 4/5 on $pmux $procmux$1552.
+    dead port 5/5 on $pmux $procmux$1552.
+    dead port 1/5 on $pmux $procmux$1547.
+    dead port 2/5 on $pmux $procmux$1547.
+    dead port 3/5 on $pmux $procmux$1547.
+    dead port 4/5 on $pmux $procmux$1547.
+    dead port 5/5 on $pmux $procmux$1547.
+    dead port 1/5 on $pmux $procmux$1542.
+    dead port 2/5 on $pmux $procmux$1542.
+    dead port 3/5 on $pmux $procmux$1542.
+    dead port 4/5 on $pmux $procmux$1542.
+    dead port 5/5 on $pmux $procmux$1542.
+    dead port 1/5 on $pmux $procmux$1537.
+    dead port 2/5 on $pmux $procmux$1537.
+    dead port 3/5 on $pmux $procmux$1537.
+    dead port 4/5 on $pmux $procmux$1537.
+    dead port 5/5 on $pmux $procmux$1537.
+    dead port 1/5 on $pmux $procmux$1532.
+    dead port 2/5 on $pmux $procmux$1532.
+    dead port 3/5 on $pmux $procmux$1532.
+    dead port 4/5 on $pmux $procmux$1532.
+    dead port 5/5 on $pmux $procmux$1532.
+    dead port 1/2 on $mux $procmux$1530.
+    dead port 2/2 on $mux $procmux$1530.
+    dead port 1/2 on $mux $procmux$1528.
+    dead port 2/2 on $mux $procmux$1528.
+    dead port 1/2 on $mux $procmux$1523.
+    dead port 2/2 on $mux $procmux$1523.
+    dead port 1/2 on $mux $procmux$1521.
+    dead port 2/2 on $mux $procmux$1521.
+    dead port 2/2 on $mux $procmux$1516.
+    dead port 2/2 on $mux $procmux$1514.
+    dead port 1/2 on $mux $procmux$1492.
+    dead port 2/2 on $mux $procmux$1492.
+    dead port 1/2 on $mux $procmux$1490.
+    dead port 2/2 on $mux $procmux$1490.
+    dead port 1/2 on $mux $procmux$1485.
+    dead port 2/2 on $mux $procmux$1485.
+    dead port 1/2 on $mux $procmux$1483.
+    dead port 2/2 on $mux $procmux$1483.
+    dead port 2/2 on $mux $procmux$1478.
+    dead port 2/2 on $mux $procmux$1476.
+    dead port 1/2 on $mux $procmux$1454.
+    dead port 2/2 on $mux $procmux$1454.
+    dead port 1/2 on $mux $procmux$1452.
+    dead port 2/2 on $mux $procmux$1452.
+    dead port 1/2 on $mux $procmux$1447.
+    dead port 2/2 on $mux $procmux$1447.
+    dead port 1/2 on $mux $procmux$1445.
+    dead port 2/2 on $mux $procmux$1445.
+    dead port 2/2 on $mux $procmux$1440.
+    dead port 2/2 on $mux $procmux$1438.
+    dead port 1/2 on $mux $procmux$1416.
+    dead port 2/2 on $mux $procmux$1416.
+    dead port 1/2 on $mux $procmux$1414.
+    dead port 2/2 on $mux $procmux$1414.
+    dead port 1/2 on $mux $procmux$1409.
+    dead port 2/2 on $mux $procmux$1409.
+    dead port 1/2 on $mux $procmux$1407.
+    dead port 2/2 on $mux $procmux$1407.
+    dead port 2/2 on $mux $procmux$1402.
+    dead port 2/2 on $mux $procmux$1400.
+    dead port 1/2 on $mux $procmux$1378.
+    dead port 2/2 on $mux $procmux$1378.
+    dead port 1/2 on $mux $procmux$1376.
+    dead port 2/2 on $mux $procmux$1376.
+    dead port 1/2 on $mux $procmux$1371.
+    dead port 2/2 on $mux $procmux$1371.
+    dead port 1/2 on $mux $procmux$1369.
+    dead port 2/2 on $mux $procmux$1369.
+    dead port 2/2 on $mux $procmux$1364.
+    dead port 2/2 on $mux $procmux$1362.
+    dead port 1/2 on $mux $procmux$1340.
+    dead port 2/2 on $mux $procmux$1340.
+    dead port 1/2 on $mux $procmux$1338.
+    dead port 2/2 on $mux $procmux$1338.
+    dead port 1/2 on $mux $procmux$1333.
+    dead port 2/2 on $mux $procmux$1333.
+    dead port 1/2 on $mux $procmux$1331.
+    dead port 2/2 on $mux $procmux$1331.
+    dead port 2/2 on $mux $procmux$1326.
+    dead port 2/2 on $mux $procmux$1324.
+    dead port 1/2 on $mux $procmux$1302.
+    dead port 2/2 on $mux $procmux$1302.
+    dead port 1/2 on $mux $procmux$1300.
+    dead port 2/2 on $mux $procmux$1300.
+    dead port 1/2 on $mux $procmux$1295.
+    dead port 2/2 on $mux $procmux$1295.
+    dead port 1/2 on $mux $procmux$1293.
+    dead port 2/2 on $mux $procmux$1293.
+    dead port 2/2 on $mux $procmux$1288.
+    dead port 2/2 on $mux $procmux$1286.
+    dead port 1/2 on $mux $procmux$1264.
+    dead port 2/2 on $mux $procmux$1264.
+    dead port 1/2 on $mux $procmux$1262.
+    dead port 2/2 on $mux $procmux$1262.
+    dead port 1/2 on $mux $procmux$1257.
+    dead port 2/2 on $mux $procmux$1257.
+    dead port 1/2 on $mux $procmux$1255.
+    dead port 2/2 on $mux $procmux$1255.
+    dead port 2/2 on $mux $procmux$1250.
+    dead port 2/2 on $mux $procmux$1248.
+    dead port 2/2 on $mux $procmux$1226.
+    dead port 2/2 on $mux $procmux$1221.
+    dead port 1/2 on $mux $procmux$650.
+    dead port 2/2 on $mux $procmux$650.
+    dead port 1/2 on $mux $procmux$647.
+    dead port 2/2 on $mux $procmux$647.
+    dead port 1/2 on $mux $procmux$644.
+    dead port 2/2 on $mux $procmux$644.
+    dead port 1/2 on $mux $procmux$641.
+    dead port 2/2 on $mux $procmux$641.
+    dead port 1/2 on $mux $procmux$638.
+    dead port 2/2 on $mux $procmux$638.
+    dead port 1/2 on $mux $procmux$636.
+    dead port 2/2 on $mux $procmux$636.
+    dead port 1/2 on $mux $procmux$632.
+    dead port 2/2 on $mux $procmux$632.
+    dead port 1/2 on $mux $procmux$630.
+    dead port 2/2 on $mux $procmux$630.
+    dead port 1/2 on $mux $procmux$626.
+    dead port 2/2 on $mux $procmux$626.
+    dead port 1/2 on $mux $procmux$624.
+    dead port 2/2 on $mux $procmux$624.
+    dead port 1/2 on $mux $procmux$620.
+    dead port 2/2 on $mux $procmux$620.
+    dead port 1/2 on $mux $procmux$618.
+    dead port 2/2 on $mux $procmux$618.
+    dead port 1/2 on $mux $procmux$614.
+    dead port 2/2 on $mux $procmux$614.
+    dead port 1/2 on $mux $procmux$612.
+    dead port 2/2 on $mux $procmux$612.
+    dead port 1/2 on $mux $procmux$609.
+    dead port 2/2 on $mux $procmux$609.
+    dead port 1/2 on $mux $procmux$605.
+    dead port 2/2 on $mux $procmux$605.
+    dead port 1/2 on $mux $procmux$603.
+    dead port 2/2 on $mux $procmux$603.
+    dead port 1/2 on $mux $procmux$600.
+    dead port 2/2 on $mux $procmux$600.
+    dead port 1/2 on $mux $procmux$578.
+    dead port 2/2 on $mux $procmux$578.
+    dead port 1/2 on $mux $procmux$575.
+    dead port 2/2 on $mux $procmux$575.
+    dead port 1/2 on $mux $procmux$572.
+    dead port 2/2 on $mux $procmux$572.
+    dead port 1/2 on $mux $procmux$569.
+    dead port 2/2 on $mux $procmux$569.
+    dead port 1/2 on $mux $procmux$566.
+    dead port 2/2 on $mux $procmux$566.
+    dead port 1/2 on $mux $procmux$563.
+    dead port 2/2 on $mux $procmux$563.
+    dead port 1/2 on $mux $procmux$560.
+    dead port 2/2 on $mux $procmux$560.
+    dead port 1/2 on $mux $procmux$558.
+    dead port 2/2 on $mux $procmux$558.
+    dead port 1/2 on $mux $procmux$554.
+    dead port 2/2 on $mux $procmux$554.
+    dead port 1/2 on $mux $procmux$552.
+    dead port 2/2 on $mux $procmux$552.
+    dead port 1/2 on $mux $procmux$548.
+    dead port 2/2 on $mux $procmux$548.
+    dead port 1/2 on $mux $procmux$546.
+    dead port 2/2 on $mux $procmux$546.
+    dead port 1/2 on $mux $procmux$542.
+    dead port 2/2 on $mux $procmux$542.
+    dead port 1/2 on $mux $procmux$540.
+    dead port 2/2 on $mux $procmux$540.
+    dead port 1/2 on $mux $procmux$536.
+    dead port 2/2 on $mux $procmux$536.
+    dead port 1/2 on $mux $procmux$534.
+    dead port 2/2 on $mux $procmux$534.
+    dead port 1/2 on $mux $procmux$530.
+    dead port 2/2 on $mux $procmux$530.
+    dead port 1/2 on $mux $procmux$528.
+    dead port 2/2 on $mux $procmux$528.
+    dead port 2/2 on $mux $procmux$524.
+    dead port 2/2 on $mux $procmux$522.
+    dead port 1/5 on $pmux $procmux$1607.
+    dead port 2/5 on $pmux $procmux$1607.
+    dead port 3/5 on $pmux $procmux$1607.
+    dead port 4/5 on $pmux $procmux$1607.
+    dead port 5/5 on $pmux $procmux$1607.
+    dead port 1/5 on $pmux $procmux$1602.
+    dead port 2/5 on $pmux $procmux$1602.
+    dead port 3/5 on $pmux $procmux$1602.
+    dead port 4/5 on $pmux $procmux$1602.
+    dead port 5/5 on $pmux $procmux$1602.
+    dead port 1/2 on $mux $procmux$501.
+    dead port 2/2 on $mux $procmux$501.
+    dead port 1/2 on $mux $procmux$499.
+    dead port 2/2 on $mux $procmux$499.
+    dead port 1/2 on $mux $procmux$496.
+    dead port 2/2 on $mux $procmux$496.
+    dead port 1/2 on $mux $procmux$492.
+    dead port 2/2 on $mux $procmux$492.
+    dead port 1/2 on $mux $procmux$490.
+    dead port 2/2 on $mux $procmux$490.
+    dead port 1/2 on $mux $procmux$487.
+    dead port 2/2 on $mux $procmux$487.
+    dead port 1/2 on $mux $procmux$483.
+    dead port 2/2 on $mux $procmux$483.
+    dead port 1/2 on $mux $procmux$481.
+    dead port 2/2 on $mux $procmux$481.
+    dead port 1/2 on $mux $procmux$478.
+    dead port 2/2 on $mux $procmux$478.
+    dead port 1/2 on $mux $procmux$474.
+    dead port 2/2 on $mux $procmux$474.
+    dead port 1/2 on $mux $procmux$472.
+    dead port 2/2 on $mux $procmux$472.
+    dead port 1/2 on $mux $procmux$469.
+    dead port 2/2 on $mux $procmux$469.
+    dead port 2/2 on $mux $procmux$465.
+    dead port 1/2 on $mux $procmux$463.
+    dead port 2/2 on $mux $procmux$460.
+    dead port 1/5 on $pmux $procmux$1597.
+    dead port 2/5 on $pmux $procmux$1597.
+    dead port 3/5 on $pmux $procmux$1597.
+    dead port 4/5 on $pmux $procmux$1597.
+    dead port 5/5 on $pmux $procmux$1597.
+    dead port 1/5 on $pmux $procmux$1592.
+    dead port 2/5 on $pmux $procmux$1592.
+    dead port 3/5 on $pmux $procmux$1592.
+    dead port 4/5 on $pmux $procmux$1592.
+    dead port 5/5 on $pmux $procmux$1592.
+    dead port 1/5 on $pmux $procmux$1587.
+    dead port 2/5 on $pmux $procmux$1587.
+    dead port 3/5 on $pmux $procmux$1587.
+    dead port 4/5 on $pmux $procmux$1587.
+    dead port 5/5 on $pmux $procmux$1587.
+    dead port 1/2 on $mux $procmux$439.
+    dead port 2/2 on $mux $procmux$439.
+    dead port 1/2 on $mux $procmux$437.
+    dead port 2/2 on $mux $procmux$437.
+    dead port 1/2 on $mux $procmux$434.
+    dead port 2/2 on $mux $procmux$434.
+    dead port 1/2 on $mux $procmux$431.
+    dead port 2/2 on $mux $procmux$431.
+    dead port 1/2 on $mux $procmux$427.
+    dead port 2/2 on $mux $procmux$427.
+    dead port 1/2 on $mux $procmux$425.
+    dead port 2/2 on $mux $procmux$425.
+    dead port 1/2 on $mux $procmux$422.
+    dead port 2/2 on $mux $procmux$422.
+    dead port 1/2 on $mux $procmux$419.
+    dead port 2/2 on $mux $procmux$419.
+    dead port 1/2 on $mux $procmux$415.
+    dead port 2/2 on $mux $procmux$415.
+    dead port 1/2 on $mux $procmux$413.
+    dead port 2/2 on $mux $procmux$413.
+    dead port 1/2 on $mux $procmux$410.
+    dead port 2/2 on $mux $procmux$410.
+    dead port 1/2 on $mux $procmux$407.
+    dead port 2/2 on $mux $procmux$407.
+    dead port 1/2 on $mux $procmux$404.
+    dead port 2/2 on $mux $procmux$404.
+    dead port 1/2 on $mux $procmux$400.
+    dead port 2/2 on $mux $procmux$400.
+    dead port 1/2 on $mux $procmux$398.
+    dead port 2/2 on $mux $procmux$398.
+    dead port 1/2 on $mux $procmux$395.
+    dead port 2/2 on $mux $procmux$395.
+    dead port 1/2 on $mux $procmux$392.
+    dead port 2/2 on $mux $procmux$392.
+    dead port 1/2 on $mux $procmux$389.
+    dead port 2/2 on $mux $procmux$389.
+    dead port 1/2 on $mux $procmux$385.
+    dead port 2/2 on $mux $procmux$385.
+    dead port 1/2 on $mux $procmux$383.
+    dead port 2/2 on $mux $procmux$383.
+    dead port 1/2 on $mux $procmux$380.
+    dead port 2/2 on $mux $procmux$380.
+    dead port 1/2 on $mux $procmux$377.
+    dead port 2/2 on $mux $procmux$377.
+    dead port 1/2 on $mux $procmux$374.
+    dead port 2/2 on $mux $procmux$374.
+    dead port 1/2 on $mux $procmux$371.
+    dead port 2/2 on $mux $procmux$371.
+    dead port 1/2 on $mux $procmux$367.
+    dead port 2/2 on $mux $procmux$367.
+    dead port 1/2 on $mux $procmux$365.
+    dead port 2/2 on $mux $procmux$365.
+    dead port 1/2 on $mux $procmux$362.
+    dead port 2/2 on $mux $procmux$362.
+    dead port 1/2 on $mux $procmux$359.
+    dead port 2/2 on $mux $procmux$359.
+    dead port 1/2 on $mux $procmux$356.
+    dead port 2/2 on $mux $procmux$356.
+    dead port 1/2 on $mux $procmux$353.
+    dead port 2/2 on $mux $procmux$353.
+    dead port 2/2 on $mux $procmux$349.
+    dead port 1/2 on $mux $procmux$347.
+    dead port 1/2 on $mux $procmux$344.
+    dead port 1/2 on $mux $procmux$341.
+    dead port 1/2 on $mux $procmux$338.
+    dead port 2/2 on $mux $procmux$335.
+    dead port 1/5 on $pmux $procmux$1582.
+    dead port 2/5 on $pmux $procmux$1582.
+    dead port 3/5 on $pmux $procmux$1582.
+    dead port 4/5 on $pmux $procmux$1582.
+    dead port 5/5 on $pmux $procmux$1582.
+    dead port 1/5 on $pmux $procmux$1577.
+    dead port 2/5 on $pmux $procmux$1577.
+    dead port 3/5 on $pmux $procmux$1577.
+    dead port 4/5 on $pmux $procmux$1577.
+    dead port 5/5 on $pmux $procmux$1577.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 329 multiplexer ports.
+<suppressed ~87 debug messages>
+
+6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \systolic_array.
+    New ctrl vector for $pmux cell $procmux$1617: { $auto$opt_reduce.cc:132:opt_mux$1964 $auto$opt_reduce.cc:132:opt_mux$1962 }
+    New ctrl vector for $pmux cell $procmux$1612: { $auto$opt_reduce.cc:132:opt_mux$1968 $auto$opt_reduce.cc:132:opt_mux$1966 }
+    New input vector for $reduce_or cell $auto$opt_reduce.cc:126:opt_mux$1961: { $procmux$1830_CMP $procmux$1835_CMP }
+    New input vector for $reduce_or cell $auto$opt_reduce.cc:126:opt_mux$1965: { $procmux$1830_CMP $procmux$1835_CMP }
+  Optimizing cells in module \systolic_array.
+  Optimizing cells in module \pe.
+Performed a total of 4 changes.
+
+6.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\systolic_array'.
+<suppressed ~6 debug messages>
+Finding identical cells in module `\pe'.
+Removed a total of 2 cells.
+
+6.6. Executing OPT_RMDFF pass (remove dff with constant values).
+Removing $procdff$1941 ($adff) from module systolic_array.
+Removing $procdff$1942 ($adff) from module systolic_array.
+Removing $procdff$1869 ($adff) from module systolic_array.
+Removing $procdff$1868 ($adff) from module systolic_array.
+Removing $procdff$1865 ($adff) from module systolic_array.
+Replaced 5 DFF cells.
+
+6.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \systolic_array..
+Finding unused cells or wires in module \pe..
+Removed 13 unused cells and 907 unused wires.
+<suppressed ~21 debug messages>
+
+6.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+<suppressed ~20 debug messages>
+
+6.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+    dead port 1/17 on $pmux $procmux$1345.
+    dead port 2/17 on $pmux $procmux$1345.
+    dead port 3/17 on $pmux $procmux$1345.
+    dead port 5/17 on $pmux $procmux$1345.
+    dead port 6/17 on $pmux $procmux$1345.
+    dead port 7/17 on $pmux $procmux$1345.
+    dead port 9/17 on $pmux $procmux$1345.
+    dead port 10/17 on $pmux $procmux$1345.
+    dead port 11/17 on $pmux $procmux$1345.
+    dead port 13/17 on $pmux $procmux$1345.
+    dead port 14/17 on $pmux $procmux$1345.
+    dead port 15/17 on $pmux $procmux$1345.
+    dead port 1/17 on $pmux $procmux$1497.
+    dead port 2/17 on $pmux $procmux$1497.
+    dead port 3/17 on $pmux $procmux$1497.
+    dead port 4/17 on $pmux $procmux$1497.
+    dead port 5/17 on $pmux $procmux$1497.
+    dead port 6/17 on $pmux $procmux$1497.
+    dead port 7/17 on $pmux $procmux$1497.
+    dead port 8/17 on $pmux $procmux$1497.
+Removed 20 multiplexer ports.
+<suppressed ~72 debug messages>
+
+6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \pe.
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module \systolic_array.
+Performed a total of 0 changes.
+
+6.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+6.13. Executing OPT_RMDFF pass (remove dff with constant values).
+
+6.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+Removed 0 unused cells and 21 unused wires.
+<suppressed ~1 debug messages>
+
+6.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+6.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~72 debug messages>
+
+6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \pe.
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module \systolic_array.
+Performed a total of 0 changes.
+
+6.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+6.20. Executing OPT_RMDFF pass (remove dff with constant values).
+
+6.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+6.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+6.23. Finished OPT passes. (There is nothing left to do.)
+
+7. Executing FSM pass (extract and optimize FSM).
+
+7.1. Executing FSM_DETECT pass (finding FSMs in design).
+Found FSM state register systolic_array.state.
+
+7.2. Executing FSM_EXTRACT pass (extracting FSM from design).
+Extracting FSM `\state' from module `\systolic_array'.
+  found $adff cell for state register: $procdff$1911
+  root of input selection tree: $0\state[1:0]
+  found reset state: 2'00 (from async reset)
+  found ctrl input: $procmux$1533_CMP
+  found ctrl input: $procmux$1222_CMP
+  found ctrl input: $procmux$1251_CMP
+  found ctrl input: $procmux$1536_CMP
+  found ctrl input: \ctrl_start
+  found ctrl input: $eq$../rtl/systolic_array.v:181$208_Y
+  found state code: 2'11
+  found ctrl input: $eq$../rtl/systolic_array.v:170$206_Y
+  found state code: 2'10
+  found state code: 2'01
+  found ctrl output: $procmux$1251_CMP
+  found ctrl output: $procmux$1533_CMP
+  found ctrl output: $procmux$1222_CMP
+  found ctrl output: $procmux$1536_CMP
+  ctrl inputs: { $eq$../rtl/systolic_array.v:181$208_Y $eq$../rtl/systolic_array.v:170$206_Y \ctrl_start }
+  ctrl outputs: { $procmux$1533_CMP $procmux$1536_CMP $procmux$1251_CMP $procmux$1222_CMP $0\state[1:0] }
+  transition:       2'00 3'--0 ->       2'00 6'010000
+  transition:       2'00 3'--1 ->       2'01 6'010001
+  transition:       2'10 3'0-- ->       2'10 6'000110
+  transition:       2'10 3'1-- ->       2'11 6'000111
+  transition:       2'01 3'-0- ->       2'01 6'001001
+  transition:       2'01 3'-1- ->       2'10 6'001010
+  transition:       2'11 3'--0 ->       2'11 6'100011
+  transition:       2'11 3'--1 ->       2'00 6'100000
+
+7.3. Executing FSM_OPT pass (simple optimizations of FSMs).
+Optimizing FSM `$fsm$\state$1969' from module `\systolic_array'.
+
+7.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+Removed 10 unused cells and 10 unused wires.
+<suppressed ~11 debug messages>
+
+7.5. Executing FSM_OPT pass (simple optimizations of FSMs).
+Optimizing FSM `$fsm$\state$1969' from module `\systolic_array'.
+  Removing unused output signal $0\state[1:0] [0].
+  Removing unused output signal $0\state[1:0] [1].
+
+7.6. Executing FSM_RECODE pass (re-assigning FSM state encoding).
+Recoding FSM `$fsm$\state$1969' from module `\systolic_array' using `auto' encoding:
+  mapping auto encoding to `one-hot` for this FSM.
+  00 -> ---1
+  10 -> --1-
+  01 -> -1--
+  11 -> 1---
+
+7.7. Executing FSM_INFO pass (dumping all available information on FSM cells).
+
+FSM `$fsm$\state$1969' from module `\systolic_array':
+-------------------------------------
+
+  Information on FSM $fsm$\state$1969 (\state):
+
+  Number of input signals:    3
+  Number of output signals:   4
+  Number of state bits:       4
+
+  Input signals:
+    0: \ctrl_start
+    1: $eq$../rtl/systolic_array.v:170$206_Y
+    2: $eq$../rtl/systolic_array.v:181$208_Y
+
+  Output signals:
+    0: $procmux$1222_CMP
+    1: $procmux$1251_CMP
+    2: $procmux$1536_CMP
+    3: $procmux$1533_CMP
+
+  State encoding:
+    0:     4'---1  <RESET STATE>
+    1:     4'--1-
+    2:     4'-1--
+    3:     4'1---
+
+  Transition Table (state_in, ctrl_in, state_out, ctrl_out):
+      0:     0 3'--0   ->     0 4'0100
+      1:     0 3'--1   ->     2 4'0100
+      2:     1 3'0--   ->     1 4'0001
+      3:     1 3'1--   ->     3 4'0001
+      4:     2 3'-1-   ->     1 4'0010
+      5:     2 3'-0-   ->     2 4'0010
+      6:     3 3'--1   ->     0 4'1000
+      7:     3 3'--0   ->     3 4'1000
+
+-------------------------------------
+
+7.8. Executing FSM_MAP pass (mapping FSMs to basic logic).
+Mapping FSM `$fsm$\state$1969' from module `\systolic_array'.
+
+8. Executing OPT pass (performing simple optimizations).
+
+8.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+<suppressed ~8 debug messages>
+
+8.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+8.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~71 debug messages>
+
+8.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \pe.
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module \systolic_array.
+    New input vector for $reduce_or cell $auto$fsm_map.cc:144:implement_pattern_cache$1987: { $auto$fsm_map.cc:118:implement_pattern_cache$1981 $auto$fsm_map.cc:118:implement_pattern_cache$1985 }
+  Optimizing cells in module \systolic_array.
+Performed a total of 1 changes.
+
+8.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+8.6. Executing OPT_RMDFF pass (remove dff with constant values).
+
+8.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+Removed 0 unused cells and 12 unused wires.
+<suppressed ~1 debug messages>
+
+8.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+8.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+8.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~71 debug messages>
+
+8.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \pe.
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module \systolic_array.
+Performed a total of 0 changes.
+
+8.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+8.13. Executing OPT_RMDFF pass (remove dff with constant values).
+
+8.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+8.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+8.16. Finished OPT passes. (There is nothing left to do.)
+
+9. Executing MEMORY pass.
+
+9.1. Executing MEMORY_DFF pass (merging $dff cells to $memrd and $memwr).
+
+9.2. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+9.3. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+9.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+9.5. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+9.6. Executing MEMORY_MAP pass (converting $mem cells to logic and flip-flops).
+
+10. Executing OPT pass (performing simple optimizations).
+
+10.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+10.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+10.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~71 debug messages>
+
+10.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \pe.
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module \systolic_array.
+Performed a total of 0 changes.
+
+10.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+10.6. Executing OPT_RMDFF pass (remove dff with constant values).
+
+10.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+10.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+10.9. Finished OPT passes. (There is nothing left to do.)
+
+11. Executing SYNTH pass.
+
+11.1. Executing HIERARCHY pass (managing design hierarchy).
+
+11.1.1. Analyzing design hierarchy..
+Top module:  \systolic_accel_top
+Used module:     $paramod\peripheral_decoder\PERIPH_BASE=805306368
+Used module:     \systolic_array
+Used module:         \pe
+
+11.1.2. Analyzing design hierarchy..
+Top module:  \systolic_accel_top
+Used module:     $paramod\peripheral_decoder\PERIPH_BASE=805306368
+Used module:     \systolic_array
+Used module:         \pe
+Removed 0 unused modules.
+
+11.2. Executing PROC pass (convert processes to netlists).
+
+11.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+11.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed a total of 0 dead cases.
+
+11.2.3. Executing PROC_INIT pass (extract init attributes).
+
+11.2.4. Executing PROC_ARST pass (detect async resets in processes).
+
+11.2.5. Executing PROC_MUX pass (convert decision trees to multiplexers).
+
+11.2.6. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+11.2.7. Executing PROC_DFF pass (convert process syncs to FFs).
+
+11.2.8. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+11.3. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+11.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+11.5. Executing CHECK pass (checking for obvious problems).
+checking module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+checking module pe..
+checking module systolic_accel_top..
+checking module systolic_array..
+found and reported 0 problems.
+
+11.6. Executing OPT pass (performing simple optimizations).
+
+11.6.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+11.6.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+11.6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~71 debug messages>
+
+11.6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \pe.
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module \systolic_array.
+Performed a total of 0 changes.
+
+11.6.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+11.6.6. Executing OPT_RMDFF pass (remove dff with constant values).
+
+11.6.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+11.6.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+11.6.9. Finished OPT passes. (There is nothing left to do.)
+
+11.7. Executing WREDUCE pass (reducing word size of cells).
+Removed top 2 bits (of 24) from port B of cell $paramod\peripheral_decoder\PERIPH_BASE=805306368.$eq$../rtl/peripheral_decoder.v:22$305 ($eq).
+Removed top 16 bits (of 32) from port B of cell pe.$add$../rtl/systolic_array.v:51$6 ($add).
+Removed top 29 bits (of 32) from port A of cell systolic_array.$add$../rtl/systolic_array.v:160$146 ($add).
+Removed top 28 bits (of 32) from port Y of cell systolic_array.$add$../rtl/systolic_array.v:160$146 ($add).
+Removed top 28 bits (of 32) from port B of cell systolic_array.$add$../rtl/systolic_array.v:160$146 ($add).
+Removed top 28 bits (of 32) from port A of cell systolic_array.$add$../rtl/systolic_array.v:160$155 ($add).
+Removed top 28 bits (of 32) from port Y of cell systolic_array.$add$../rtl/systolic_array.v:160$155 ($add).
+Removed top 28 bits (of 32) from port B of cell systolic_array.$add$../rtl/systolic_array.v:160$155 ($add).
+Removed top 28 bits (of 32) from port A of cell systolic_array.$add$../rtl/systolic_array.v:160$164 ($add).
+Removed top 28 bits (of 32) from port Y of cell systolic_array.$add$../rtl/systolic_array.v:160$164 ($add).
+Removed top 28 bits (of 32) from port B of cell systolic_array.$add$../rtl/systolic_array.v:160$164 ($add).
+Removed top 31 bits (of 32) from port B of cell systolic_array.$ge$../rtl/systolic_array.v:165$166 ($ge).
+Removed top 29 bits (of 32) from port A of cell systolic_array.$lt$../rtl/systolic_array.v:165$168 ($lt).
+Removed top 29 bits (of 32) from port B of cell systolic_array.$lt$../rtl/systolic_array.v:165$168 ($lt).
+Removed top 31 bits (of 32) from port B of cell systolic_array.$ge$../rtl/systolic_array.v:165$176 ($ge).
+Removed top 29 bits (of 32) from port B of cell systolic_array.$lt$../rtl/systolic_array.v:165$178 ($lt).
+Removed top 31 bits (of 32) from port B of cell systolic_array.$sub$../rtl/systolic_array.v:166$182 ($sub).
+Removed top 31 bits (of 32) from port B of cell systolic_array.$add$../rtl/systolic_array.v:166$184 ($add).
+Removed top 28 bits (of 32) from port Y of cell systolic_array.$add$../rtl/systolic_array.v:166$184 ($add).
+Removed top 28 bits (of 32) from port A of cell systolic_array.$add$../rtl/systolic_array.v:166$184 ($add).
+Removed top 30 bits (of 32) from port B of cell systolic_array.$ge$../rtl/systolic_array.v:165$186 ($ge).
+Removed top 29 bits (of 32) from port B of cell systolic_array.$lt$../rtl/systolic_array.v:165$188 ($lt).
+Removed top 30 bits (of 32) from port B of cell systolic_array.$sub$../rtl/systolic_array.v:166$192 ($sub).
+Removed top 30 bits (of 32) from port B of cell systolic_array.$add$../rtl/systolic_array.v:166$194 ($add).
+Removed top 28 bits (of 32) from port Y of cell systolic_array.$add$../rtl/systolic_array.v:166$194 ($add).
+Removed top 28 bits (of 32) from port A of cell systolic_array.$add$../rtl/systolic_array.v:166$194 ($add).
+Removed top 30 bits (of 32) from port B of cell systolic_array.$ge$../rtl/systolic_array.v:165$196 ($ge).
+Removed top 29 bits (of 32) from port B of cell systolic_array.$lt$../rtl/systolic_array.v:165$198 ($lt).
+Removed top 30 bits (of 32) from port B of cell systolic_array.$sub$../rtl/systolic_array.v:166$202 ($sub).
+Removed top 30 bits (of 32) from port B of cell systolic_array.$add$../rtl/systolic_array.v:166$204 ($add).
+Removed top 28 bits (of 32) from port Y of cell systolic_array.$add$../rtl/systolic_array.v:166$204 ($add).
+Removed top 28 bits (of 32) from port A of cell systolic_array.$add$../rtl/systolic_array.v:166$204 ($add).
+Removed top 31 bits (of 32) from port B of cell systolic_array.$add$../rtl/systolic_array.v:174$207 ($add).
+Removed top 29 bits (of 32) from port Y of cell systolic_array.$add$../rtl/systolic_array.v:174$207 ($add).
+Removed top 31 bits (of 32) from port B of cell systolic_array.$sub$../rtl/systolic_array.v:190$209 ($sub).
+Removed top 28 bits (of 32) from port Y of cell systolic_array.$sub$../rtl/systolic_array.v:190$209 ($sub).
+Removed top 3 bits (of 8) from port B of cell systolic_array.$lt$../rtl/systolic_array.v:245$260 ($lt).
+Removed top 3 bits (of 8) from port B of cell systolic_array.$ge$../rtl/systolic_array.v:247$270 ($ge).
+Removed top 2 bits (of 8) from port B of cell systolic_array.$lt$../rtl/systolic_array.v:247$271 ($lt).
+Removed top 28 bits (of 32) from port A of cell systolic_array.$add$../rtl/systolic_array.v:248$278 ($add).
+Removed top 28 bits (of 32) from port Y of cell systolic_array.$add$../rtl/systolic_array.v:248$278 ($add).
+Removed top 2 bits (of 8) from port B of cell systolic_array.$eq$../rtl/systolic_array.v:249$280 ($eq).
+Removed top 2 bits (of 8) from port B of cell systolic_array.$eq$../rtl/systolic_array.v:251$283 ($eq).
+Removed top 2 bits (of 8) from port B of cell systolic_array.$ge$../rtl/systolic_array.v:253$286 ($ge).
+Removed top 1 bits (of 8) from port B of cell systolic_array.$lt$../rtl/systolic_array.v:253$287 ($lt).
+Removed top 2 bits (of 8) from port B of cell systolic_array.$sub$../rtl/systolic_array.v:255$294 ($sub).
+Removed top 2 bits (of 32) from port A of cell systolic_array.$and$../rtl/systolic_array.v:255$296 ($and).
+Removed top 2 bits (of 32) from port Y of cell systolic_array.$and$../rtl/systolic_array.v:255$296 ($and).
+Removed top 2 bits (of 32) from port A of cell systolic_array.$add$../rtl/systolic_array.v:255$297 ($add).
+Removed top 2 bits (of 32) from port B of cell systolic_array.$add$../rtl/systolic_array.v:255$297 ($add).
+Removed top 28 bits (of 32) from port Y of cell systolic_array.$add$../rtl/systolic_array.v:255$297 ($add).
+Removed top 26 bits (of 30) from port A of cell systolic_array.$add$../rtl/systolic_array.v:255$297 ($add).
+Removed top 26 bits (of 30) from port B of cell systolic_array.$add$../rtl/systolic_array.v:255$297 ($add).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$327_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$328_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$329_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$330_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$331_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$332_CMP0 ($eq).
+Removed top 3 bits (of 4) from port B of cell systolic_array.$procmux$333_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1051_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1068_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1086_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1105_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1125_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1146_CMP0 ($eq).
+Removed top 3 bits (of 4) from port B of cell systolic_array.$procmux$1168_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1240_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1241_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1242_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1243_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1244_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1245_CMP0 ($eq).
+Removed top 3 bits (of 4) from port B of cell systolic_array.$procmux$1246_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1278_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1279_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1280_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1281_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1282_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1283_CMP0 ($eq).
+Removed top 3 bits (of 4) from port B of cell systolic_array.$procmux$1284_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1316_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1317_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1318_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1319_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1320_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1321_CMP0 ($eq).
+Removed top 3 bits (of 4) from port B of cell systolic_array.$procmux$1322_CMP0 ($eq).
+Removed top 1 bits (of 2) from port B of cell systolic_array.$procmux$1357_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1392_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1393_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1394_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1395_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1396_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1397_CMP0 ($eq).
+Removed top 3 bits (of 4) from port B of cell systolic_array.$procmux$1398_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1430_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1431_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1432_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1433_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1434_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1435_CMP0 ($eq).
+Removed top 3 bits (of 4) from port B of cell systolic_array.$procmux$1436_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1468_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1469_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1470_CMP0 ($eq).
+Removed top 1 bits (of 4) from port B of cell systolic_array.$procmux$1471_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1472_CMP0 ($eq).
+Removed top 2 bits (of 4) from port B of cell systolic_array.$procmux$1473_CMP0 ($eq).
+Removed top 3 bits (of 4) from port B of cell systolic_array.$procmux$1474_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell systolic_array.$procmux$1510_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell systolic_array.$procmux$1511_CMP0 ($eq).
+Removed top 2 bits (of 3) from port B of cell systolic_array.$procmux$1512_CMP0 ($eq).
+Removed top 26 bits (of 30) from port Y of cell systolic_array.$and$../rtl/systolic_array.v:255$296 ($and).
+Removed top 26 bits (of 30) from port A of cell systolic_array.$and$../rtl/systolic_array.v:255$296 ($and).
+Removed top 26 bits (of 32) from port Y of cell systolic_array.$sub$../rtl/systolic_array.v:255$294 ($sub).
+Removed top 2 bits (of 8) from port A of cell systolic_array.$sub$../rtl/systolic_array.v:255$294 ($sub).
+Removed top 28 bits (of 32) from wire systolic_array.$add$../rtl/systolic_array.v:160$146_Y.
+Removed top 28 bits (of 32) from wire systolic_array.$add$../rtl/systolic_array.v:166$184_Y.
+Removed top 28 bits (of 32) from wire systolic_array.$add$../rtl/systolic_array.v:166$194_Y.
+Removed top 28 bits (of 32) from wire systolic_array.$add$../rtl/systolic_array.v:166$204_Y.
+Removed top 28 bits (of 32) from wire systolic_array.$add$../rtl/systolic_array.v:224$230_Y.
+Removed top 28 bits (of 32) from wire systolic_array.$add$../rtl/systolic_array.v:255$297_Y.
+Removed top 2 bits (of 32) from wire systolic_array.$sub$../rtl/systolic_array.v:159$149_Y.
+Removed top 2 bits (of 32) from wire systolic_array.$sub$../rtl/systolic_array.v:159$158_Y.
+Removed top 28 bits (of 32) from wire systolic_array.$sub$../rtl/systolic_array.v:190$209_Y.
+
+11.8. Executing PEEPOPT pass (run peephole optimizers).
+
+11.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+Removed 0 unused cells and 11 unused wires.
+<suppressed ~1 debug messages>
+
+11.10. Executing TECHMAP pass (map to technology primitives).
+
+11.10.1. Executing Verilog-2005 frontend: /usr/bin/../share/yosys/cmp2lut.v
+Parsing Verilog input from `/usr/bin/../share/yosys/cmp2lut.v' to AST representation.
+Generating RTLIL representation for module `\_90_lut_cmp_'.
+Successfully finished Verilog frontend.
+
+11.10.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~632 debug messages>
+
+11.11. Executing ALUMACC pass (create $alu and $macc cells).
+Extracting $alu and $macc cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368:
+  created 0 $alu and 0 $macc cells.
+Extracting $alu and $macc cells in module pe:
+  creating $macc model for $add$../rtl/systolic_array.v:51$6 ($add).
+  creating $macc model for $mul$../rtl/systolic_array.v:34$3 ($mul).
+  creating $alu model for $macc $add$../rtl/systolic_array.v:51$6.
+  creating $macc cell for $mul$../rtl/systolic_array.v:34$3: $auto$alumacc.cc:354:replace_macc$2024
+  creating $alu cell for $add$../rtl/systolic_array.v:51$6: $auto$alumacc.cc:474:replace_alu$2025
+  created 1 $alu and 1 $macc cells.
+Extracting $alu and $macc cells in module systolic_accel_top:
+  created 0 $alu and 0 $macc cells.
+Extracting $alu and $macc cells in module systolic_array:
+  creating $macc model for $add$../rtl/systolic_array.v:160$146 ($add).
+  creating $macc model for $add$../rtl/systolic_array.v:160$155 ($add).
+  creating $macc model for $add$../rtl/systolic_array.v:160$164 ($add).
+  creating $macc model for $add$../rtl/systolic_array.v:166$184 ($add).
+  creating $macc model for $add$../rtl/systolic_array.v:166$194 ($add).
+  creating $macc model for $add$../rtl/systolic_array.v:166$204 ($add).
+  creating $macc model for $add$../rtl/systolic_array.v:174$207 ($add).
+  creating $macc model for $add$../rtl/systolic_array.v:248$278 ($add).
+  creating $macc model for $add$../rtl/systolic_array.v:255$297 ($add).
+  creating $macc model for $sub$../rtl/systolic_array.v:166$182 ($sub).
+  creating $macc model for $sub$../rtl/systolic_array.v:166$192 ($sub).
+  creating $macc model for $sub$../rtl/systolic_array.v:166$202 ($sub).
+  creating $macc model for $sub$../rtl/systolic_array.v:190$209 ($sub).
+  creating $macc model for $sub$../rtl/systolic_array.v:255$294 ($sub).
+  creating $alu model for $macc $sub$../rtl/systolic_array.v:255$294.
+  creating $alu model for $macc $sub$../rtl/systolic_array.v:190$209.
+  creating $alu model for $macc $sub$../rtl/systolic_array.v:166$202.
+  creating $alu model for $macc $sub$../rtl/systolic_array.v:166$192.
+  creating $alu model for $macc $sub$../rtl/systolic_array.v:166$182.
+  creating $alu model for $macc $add$../rtl/systolic_array.v:255$297.
+  creating $alu model for $macc $add$../rtl/systolic_array.v:248$278.
+  creating $alu model for $macc $add$../rtl/systolic_array.v:174$207.
+  creating $alu model for $macc $add$../rtl/systolic_array.v:166$204.
+  creating $alu model for $macc $add$../rtl/systolic_array.v:166$194.
+  creating $alu model for $macc $add$../rtl/systolic_array.v:166$184.
+  creating $alu model for $macc $add$../rtl/systolic_array.v:160$164.
+  creating $alu model for $macc $add$../rtl/systolic_array.v:160$155.
+  creating $alu model for $macc $add$../rtl/systolic_array.v:160$146.
+  creating $alu model for $ge$../rtl/systolic_array.v:165$166 ($ge): new $alu
+  creating $alu model for $ge$../rtl/systolic_array.v:165$176 ($ge): new $alu
+  creating $alu model for $ge$../rtl/systolic_array.v:165$186 ($ge): new $alu
+  creating $alu model for $ge$../rtl/systolic_array.v:165$196 ($ge): new $alu
+  creating $alu model for $ge$../rtl/systolic_array.v:247$270 ($ge): new $alu
+  creating $alu model for $ge$../rtl/systolic_array.v:253$286 ($ge): new $alu
+  creating $alu model for $lt$../rtl/systolic_array.v:165$168 ($lt): new $alu
+  creating $alu model for $lt$../rtl/systolic_array.v:165$178 ($lt): new $alu
+  creating $alu model for $lt$../rtl/systolic_array.v:165$188 ($lt): new $alu
+  creating $alu model for $lt$../rtl/systolic_array.v:165$198 ($lt): new $alu
+  creating $alu model for $lt$../rtl/systolic_array.v:245$260 ($lt): merged with $ge$../rtl/systolic_array.v:247$270.
+  creating $alu model for $lt$../rtl/systolic_array.v:247$271 ($lt): new $alu
+  creating $alu model for $lt$../rtl/systolic_array.v:253$287 ($lt): new $alu
+  creating $alu model for $eq$../rtl/systolic_array.v:249$280 ($eq): merged with $lt$../rtl/systolic_array.v:247$271.
+  creating $alu model for $procmux$1509_CMP0 ($eq): merged with $lt$../rtl/systolic_array.v:165$168.
+  creating $alu model for $procmux$1510_CMP0 ($eq): merged with $ge$../rtl/systolic_array.v:165$196.
+  creating $alu model for $procmux$1511_CMP0 ($eq): merged with $ge$../rtl/systolic_array.v:165$186.
+  creating $alu model for $procmux$1512_CMP0 ($eq): merged with $ge$../rtl/systolic_array.v:165$176.
+  creating $alu cell for $lt$../rtl/systolic_array.v:253$287: $auto$alumacc.cc:474:replace_alu$2040
+  creating $alu cell for $lt$../rtl/systolic_array.v:247$271, $eq$../rtl/systolic_array.v:249$280: $auto$alumacc.cc:474:replace_alu$2051
+  creating $alu cell for $lt$../rtl/systolic_array.v:165$198: $auto$alumacc.cc:474:replace_alu$2062
+  creating $alu cell for $lt$../rtl/systolic_array.v:165$188: $auto$alumacc.cc:474:replace_alu$2073
+  creating $alu cell for $lt$../rtl/systolic_array.v:165$178: $auto$alumacc.cc:474:replace_alu$2084
+  creating $alu cell for $lt$../rtl/systolic_array.v:165$168, $procmux$1509_CMP0: $auto$alumacc.cc:474:replace_alu$2095
+  creating $alu cell for $ge$../rtl/systolic_array.v:253$286: $auto$alumacc.cc:474:replace_alu$2102
+  creating $alu cell for $ge$../rtl/systolic_array.v:247$270, $lt$../rtl/systolic_array.v:245$260: $auto$alumacc.cc:474:replace_alu$2111
+  creating $alu cell for $ge$../rtl/systolic_array.v:165$196, $procmux$1510_CMP0: $auto$alumacc.cc:474:replace_alu$2124
+  creating $alu cell for $ge$../rtl/systolic_array.v:165$186, $procmux$1511_CMP0: $auto$alumacc.cc:474:replace_alu$2133
+  creating $alu cell for $ge$../rtl/systolic_array.v:165$166: $auto$alumacc.cc:474:replace_alu$2142
+  creating $alu cell for $add$../rtl/systolic_array.v:160$146: $auto$alumacc.cc:474:replace_alu$2151
+  creating $alu cell for $add$../rtl/systolic_array.v:160$155: $auto$alumacc.cc:474:replace_alu$2154
+  creating $alu cell for $add$../rtl/systolic_array.v:160$164: $auto$alumacc.cc:474:replace_alu$2157
+  creating $alu cell for $add$../rtl/systolic_array.v:166$184: $auto$alumacc.cc:474:replace_alu$2160
+  creating $alu cell for $add$../rtl/systolic_array.v:166$194: $auto$alumacc.cc:474:replace_alu$2163
+  creating $alu cell for $add$../rtl/systolic_array.v:166$204: $auto$alumacc.cc:474:replace_alu$2166
+  creating $alu cell for $ge$../rtl/systolic_array.v:165$176, $procmux$1512_CMP0: $auto$alumacc.cc:474:replace_alu$2169
+  creating $alu cell for $add$../rtl/systolic_array.v:174$207: $auto$alumacc.cc:474:replace_alu$2178
+  creating $alu cell for $add$../rtl/systolic_array.v:248$278: $auto$alumacc.cc:474:replace_alu$2181
+  creating $alu cell for $add$../rtl/systolic_array.v:255$297: $auto$alumacc.cc:474:replace_alu$2184
+  creating $alu cell for $sub$../rtl/systolic_array.v:166$182: $auto$alumacc.cc:474:replace_alu$2187
+  creating $alu cell for $sub$../rtl/systolic_array.v:166$192: $auto$alumacc.cc:474:replace_alu$2190
+  creating $alu cell for $sub$../rtl/systolic_array.v:166$202: $auto$alumacc.cc:474:replace_alu$2193
+  creating $alu cell for $sub$../rtl/systolic_array.v:190$209: $auto$alumacc.cc:474:replace_alu$2196
+  creating $alu cell for $sub$../rtl/systolic_array.v:255$294: $auto$alumacc.cc:474:replace_alu$2199
+  created 26 $alu and 0 $macc cells.
+
+11.12. Executing SHARE pass (SAT-based resource sharing).
+
+11.13. Executing OPT pass (performing simple optimizations).
+
+11.13.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+<suppressed ~35 debug messages>
+
+11.13.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+11.13.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~71 debug messages>
+
+11.13.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \pe.
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module \systolic_array.
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2174: { $auto$alumacc.cc:490:replace_alu$2170 [0] $auto$alumacc.cc:490:replace_alu$2170 [1] $auto$alumacc.cc:490:replace_alu$2170 [2] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2138: { $auto$alumacc.cc:490:replace_alu$2134 [0] $auto$alumacc.cc:490:replace_alu$2134 [1] $auto$alumacc.cc:490:replace_alu$2134 [2] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2129: { $auto$alumacc.cc:490:replace_alu$2125 [0] $auto$alumacc.cc:490:replace_alu$2125 [1] $auto$alumacc.cc:490:replace_alu$2125 [2] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2100: { $auto$alumacc.cc:490:replace_alu$2096 [0] $auto$alumacc.cc:490:replace_alu$2096 [1] $auto$alumacc.cc:490:replace_alu$2096 [2] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2043: { $auto$alumacc.cc:490:replace_alu$2041 [0] $auto$alumacc.cc:490:replace_alu$2041 [1] $auto$alumacc.cc:490:replace_alu$2041 [2] $auto$alumacc.cc:490:replace_alu$2041 [3] $auto$alumacc.cc:490:replace_alu$2041 [4] $auto$alumacc.cc:490:replace_alu$2041 [5] $auto$alumacc.cc:490:replace_alu$2041 [6] $auto$alumacc.cc:490:replace_alu$2041 [7] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2054: { $auto$alumacc.cc:490:replace_alu$2052 [0] $auto$alumacc.cc:490:replace_alu$2052 [1] $auto$alumacc.cc:490:replace_alu$2052 [2] $auto$alumacc.cc:490:replace_alu$2052 [3] $auto$alumacc.cc:490:replace_alu$2052 [4] $auto$alumacc.cc:490:replace_alu$2052 [5] $auto$alumacc.cc:490:replace_alu$2052 [6] $auto$alumacc.cc:490:replace_alu$2052 [7] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2065: { $auto$alumacc.cc:490:replace_alu$2063 [0] $auto$alumacc.cc:490:replace_alu$2063 [1] $auto$alumacc.cc:490:replace_alu$2063 [2] $auto$alumacc.cc:490:replace_alu$2063 [3] $auto$alumacc.cc:490:replace_alu$2063 [4] $auto$alumacc.cc:490:replace_alu$2063 [5] $auto$alumacc.cc:490:replace_alu$2063 [6] $auto$alumacc.cc:490:replace_alu$2063 [7] $auto$alumacc.cc:490:replace_alu$2063 [8] $auto$alumacc.cc:490:replace_alu$2063 [9] $auto$alumacc.cc:490:replace_alu$2063 [10] $auto$alumacc.cc:490:replace_alu$2063 [11] $auto$alumacc.cc:490:replace_alu$2063 [12] $auto$alumacc.cc:490:replace_alu$2063 [13] $auto$alumacc.cc:490:replace_alu$2063 [14] $auto$alumacc.cc:490:replace_alu$2063 [15] $auto$alumacc.cc:490:replace_alu$2063 [16] $auto$alumacc.cc:490:replace_alu$2063 [17] $auto$alumacc.cc:490:replace_alu$2063 [18] $auto$alumacc.cc:490:replace_alu$2063 [19] $auto$alumacc.cc:490:replace_alu$2063 [20] $auto$alumacc.cc:490:replace_alu$2063 [21] $auto$alumacc.cc:490:replace_alu$2063 [22] $auto$alumacc.cc:490:replace_alu$2063 [23] $auto$alumacc.cc:490:replace_alu$2063 [24] $auto$alumacc.cc:490:replace_alu$2063 [25] $auto$alumacc.cc:490:replace_alu$2063 [26] $auto$alumacc.cc:490:replace_alu$2063 [27] $auto$alumacc.cc:490:replace_alu$2063 [28] $auto$alumacc.cc:490:replace_alu$2063 [29] $auto$alumacc.cc:490:replace_alu$2063 [30] $auto$alumacc.cc:490:replace_alu$2063 [31] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2076: { $auto$alumacc.cc:490:replace_alu$2074 [0] $auto$alumacc.cc:490:replace_alu$2074 [1] $auto$alumacc.cc:490:replace_alu$2074 [2] $auto$alumacc.cc:490:replace_alu$2074 [3] $auto$alumacc.cc:490:replace_alu$2074 [4] $auto$alumacc.cc:490:replace_alu$2074 [5] $auto$alumacc.cc:490:replace_alu$2074 [6] $auto$alumacc.cc:490:replace_alu$2074 [7] $auto$alumacc.cc:490:replace_alu$2074 [8] $auto$alumacc.cc:490:replace_alu$2074 [9] $auto$alumacc.cc:490:replace_alu$2074 [10] $auto$alumacc.cc:490:replace_alu$2074 [11] $auto$alumacc.cc:490:replace_alu$2074 [12] $auto$alumacc.cc:490:replace_alu$2074 [13] $auto$alumacc.cc:490:replace_alu$2074 [14] $auto$alumacc.cc:490:replace_alu$2074 [15] $auto$alumacc.cc:490:replace_alu$2074 [16] $auto$alumacc.cc:490:replace_alu$2074 [17] $auto$alumacc.cc:490:replace_alu$2074 [18] $auto$alumacc.cc:490:replace_alu$2074 [19] $auto$alumacc.cc:490:replace_alu$2074 [20] $auto$alumacc.cc:490:replace_alu$2074 [21] $auto$alumacc.cc:490:replace_alu$2074 [22] $auto$alumacc.cc:490:replace_alu$2074 [23] $auto$alumacc.cc:490:replace_alu$2074 [24] $auto$alumacc.cc:490:replace_alu$2074 [25] $auto$alumacc.cc:490:replace_alu$2074 [26] $auto$alumacc.cc:490:replace_alu$2074 [27] $auto$alumacc.cc:490:replace_alu$2074 [28] $auto$alumacc.cc:490:replace_alu$2074 [29] $auto$alumacc.cc:490:replace_alu$2074 [30] $auto$alumacc.cc:490:replace_alu$2074 [31] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2087: { $auto$alumacc.cc:490:replace_alu$2085 [0] $auto$alumacc.cc:490:replace_alu$2085 [1] $auto$alumacc.cc:490:replace_alu$2085 [2] $auto$alumacc.cc:490:replace_alu$2085 [3] $auto$alumacc.cc:490:replace_alu$2085 [4] $auto$alumacc.cc:490:replace_alu$2085 [5] $auto$alumacc.cc:490:replace_alu$2085 [6] $auto$alumacc.cc:490:replace_alu$2085 [7] $auto$alumacc.cc:490:replace_alu$2085 [8] $auto$alumacc.cc:490:replace_alu$2085 [9] $auto$alumacc.cc:490:replace_alu$2085 [10] $auto$alumacc.cc:490:replace_alu$2085 [11] $auto$alumacc.cc:490:replace_alu$2085 [12] $auto$alumacc.cc:490:replace_alu$2085 [13] $auto$alumacc.cc:490:replace_alu$2085 [14] $auto$alumacc.cc:490:replace_alu$2085 [15] $auto$alumacc.cc:490:replace_alu$2085 [16] $auto$alumacc.cc:490:replace_alu$2085 [17] $auto$alumacc.cc:490:replace_alu$2085 [18] $auto$alumacc.cc:490:replace_alu$2085 [19] $auto$alumacc.cc:490:replace_alu$2085 [20] $auto$alumacc.cc:490:replace_alu$2085 [21] $auto$alumacc.cc:490:replace_alu$2085 [22] $auto$alumacc.cc:490:replace_alu$2085 [23] $auto$alumacc.cc:490:replace_alu$2085 [24] $auto$alumacc.cc:490:replace_alu$2085 [25] $auto$alumacc.cc:490:replace_alu$2085 [26] $auto$alumacc.cc:490:replace_alu$2085 [27] $auto$alumacc.cc:490:replace_alu$2085 [28] $auto$alumacc.cc:490:replace_alu$2085 [29] $auto$alumacc.cc:490:replace_alu$2085 [30] $auto$alumacc.cc:490:replace_alu$2085 [31] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2107: { $auto$alumacc.cc:490:replace_alu$2103 [0] $auto$alumacc.cc:490:replace_alu$2103 [1] $auto$alumacc.cc:490:replace_alu$2103 [2] $auto$alumacc.cc:490:replace_alu$2103 [3] $auto$alumacc.cc:490:replace_alu$2103 [4] $auto$alumacc.cc:490:replace_alu$2103 [5] $auto$alumacc.cc:490:replace_alu$2103 [6] $auto$alumacc.cc:490:replace_alu$2103 [7] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2116: { $auto$alumacc.cc:490:replace_alu$2112 [0] $auto$alumacc.cc:490:replace_alu$2112 [1] $auto$alumacc.cc:490:replace_alu$2112 [2] $auto$alumacc.cc:490:replace_alu$2112 [3] $auto$alumacc.cc:490:replace_alu$2112 [4] $auto$alumacc.cc:490:replace_alu$2112 [5] $auto$alumacc.cc:490:replace_alu$2112 [6] $auto$alumacc.cc:490:replace_alu$2112 [7] }
+    New input vector for $reduce_and cell $auto$alumacc.cc:64:get_eq$2147: { $auto$alumacc.cc:490:replace_alu$2143 [0] $auto$alumacc.cc:490:replace_alu$2143 [1] $auto$alumacc.cc:490:replace_alu$2143 [2] }
+  Optimizing cells in module \systolic_array.
+Performed a total of 12 changes.
+
+11.13.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+11.13.6. Executing OPT_RMDFF pass (remove dff with constant values).
+
+11.13.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+Removed 1 unused cells and 19 unused wires.
+<suppressed ~2 debug messages>
+
+11.13.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+11.13.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+11.13.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~71 debug messages>
+
+11.13.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \pe.
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module \systolic_array.
+Performed a total of 0 changes.
+
+11.13.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+11.13.13. Executing OPT_RMDFF pass (remove dff with constant values).
+
+11.13.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+11.13.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+11.13.16. Finished OPT passes. (There is nothing left to do.)
+
+11.14. Executing FSM pass (extract and optimize FSM).
+
+11.14.1. Executing FSM_DETECT pass (finding FSMs in design).
+
+11.14.2. Executing FSM_EXTRACT pass (extracting FSM from design).
+
+11.14.3. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+11.14.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+11.14.5. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+11.14.6. Executing FSM_RECODE pass (re-assigning FSM state encoding).
+
+11.14.7. Executing FSM_INFO pass (dumping all available information on FSM cells).
+
+11.14.8. Executing FSM_MAP pass (mapping FSMs to basic logic).
+
+11.15. Executing OPT pass (performing simple optimizations).
+
+11.15.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+11.15.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+11.15.3. Executing OPT_RMDFF pass (remove dff with constant values).
+
+11.15.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+11.15.5. Finished fast OPT passes.
+
+11.16. Executing MEMORY pass.
+
+11.16.1. Executing MEMORY_DFF pass (merging $dff cells to $memrd and $memwr).
+
+11.16.2. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+11.16.3. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+11.16.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+11.16.5. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+11.17. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+11.18. Executing OPT pass (performing simple optimizations).
+
+11.18.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+<suppressed ~1 debug messages>
+Optimizing module pe.
+<suppressed ~1 debug messages>
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+<suppressed ~25 debug messages>
+
+11.18.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+11.18.3. Executing OPT_RMDFF pass (remove dff with constant values).
+
+11.18.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+Removed 9 unused cells and 13 unused wires.
+<suppressed ~11 debug messages>
+
+11.18.5. Finished fast OPT passes.
+
+11.19. Executing MEMORY_MAP pass (converting $mem cells to logic and flip-flops).
+
+11.20. Executing OPT pass (performing simple optimizations).
+
+11.20.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+11.20.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+11.20.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \pe..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \systolic_accel_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module \systolic_array..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~69 debug messages>
+
+11.20.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+  Optimizing cells in module \pe.
+  Optimizing cells in module \systolic_accel_top.
+  Optimizing cells in module \systolic_array.
+Performed a total of 0 changes.
+
+11.20.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+Removed a total of 0 cells.
+
+11.20.6. Executing OPT_RMDFF pass (remove dff with constant values).
+
+11.20.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+
+11.20.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+
+11.20.9. Finished OPT passes. (There is nothing left to do.)
+
+11.21. Executing TECHMAP pass (map to technology primitives).
+
+11.21.1. Executing Verilog-2005 frontend: <techmap.v>
+Parsing Verilog input from `<techmap.v>' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `\$__div_mod_u'.
+Generating RTLIL representation for module `\$__div_mod'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_pmux'.
+Generating RTLIL representation for module `\_90_lut'.
+Successfully finished Verilog frontend.
+
+11.21.2. Continuing TECHMAP pass.
+Using extmapper maccmap for cells of type $macc.
+  add \a_in * \b_in (8x8 bits, unsigned)
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=16\B_WIDTH=32\Y_WIDTH=32 for cells of type $alu.
+Using extmapper simplemap for cells of type $mux.
+Using extmapper simplemap for cells of type $adff.
+Using extmapper simplemap for cells of type $pos.
+Using extmapper simplemap for cells of type $xor.
+Using extmapper simplemap for cells of type $not.
+Using template $paramod\_90_lcu\WIDTH=32 for cells of type $lcu.
+Using extmapper simplemap for cells of type $and.
+Using template $paramod\_90_fa\WIDTH=16 for cells of type $fa.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=16\B_WIDTH=16\Y_WIDTH=16 for cells of type $alu.
+Using extmapper simplemap for cells of type $or.
+Using template $paramod\_90_lcu\WIDTH=16 for cells of type $lcu.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=3\B_WIDTH=1\Y_WIDTH=32 for cells of type $alu.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=3\B_WIDTH=32\Y_WIDTH=32 for cells of type $alu.
+Using extmapper simplemap for cells of type $logic_and.
+Using extmapper simplemap for cells of type $eq.
+Using extmapper simplemap for cells of type $logic_not.
+Using extmapper simplemap for cells of type $logic_or.
+Using template $paramod\_90_pmux\WIDTH=32\S_WIDTH=15 for cells of type $pmux.
+Using template $paramod\_90_pmux\WIDTH=8\S_WIDTH=15 for cells of type $pmux.
+Using extmapper simplemap for cells of type $reduce_and.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=3\B_WIDTH=2\Y_WIDTH=32 for cells of type $alu.
+Using template $paramod\_90_pmux\WIDTH=8\S_WIDTH=3 for cells of type $pmux.
+Using extmapper simplemap for cells of type $reduce_or.
+Using template $paramod\_90_pmux\WIDTH=8\S_WIDTH=7 for cells of type $pmux.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=3\B_WIDTH=3\Y_WIDTH=3 for cells of type $alu.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=6\B_WIDTH=6\Y_WIDTH=6 for cells of type $alu.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=4\B_WIDTH=1\Y_WIDTH=4 for cells of type $alu.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=4\B_WIDTH=4\Y_WIDTH=4 for cells of type $alu.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=2\B_WIDTH=4\Y_WIDTH=4 for cells of type $alu.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=1\B_WIDTH=3\Y_WIDTH=3 for cells of type $alu.
+Using template $paramod\_90_pmux\WIDTH=8\S_WIDTH=2 for cells of type $pmux.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=1\B_WIDTH=4\Y_WIDTH=4 for cells of type $alu.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=3\B_WIDTH=4\Y_WIDTH=4 for cells of type $alu.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=2\B_WIDTH=3\Y_WIDTH=3 for cells of type $alu.
+Using template $paramod\_90_pmux\WIDTH=4\S_WIDTH=2 for cells of type $pmux.
+Using template $paramod\_90_pmux\WIDTH=3\S_WIDTH=2 for cells of type $pmux.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=5\B_WIDTH=8\Y_WIDTH=8 for cells of type $alu.
+Using template $paramod\_90_pmux\WIDTH=1\S_WIDTH=2 for cells of type $pmux.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=6\B_WIDTH=8\Y_WIDTH=8 for cells of type $alu.
+Using template $paramod\_90_pmux\WIDTH=1\S_WIDTH=3 for cells of type $pmux.
+Using template $paramod\_90_alu\A_SIGNED=0\B_SIGNED=0\A_WIDTH=7\B_WIDTH=8\Y_WIDTH=8 for cells of type $alu.
+Using extmapper simplemap for cells of type $dff.
+Using template $paramod\_90_lcu\WIDTH=3 for cells of type $lcu.
+Using template $paramod\_90_lcu\WIDTH=6 for cells of type $lcu.
+Using template $paramod\_90_lcu\WIDTH=4 for cells of type $lcu.
+Using template $paramod\_90_lcu\WIDTH=8 for cells of type $lcu.
+No more expansions possible.
+<suppressed ~3571 debug messages>
+
+11.22. Executing OPT pass (performing simple optimizations).
+
+11.22.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+<suppressed ~54 debug messages>
+Optimizing module pe.
+<suppressed ~474 debug messages>
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+<suppressed ~3718 debug messages>
+
+11.22.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+<suppressed ~2538 debug messages>
+Removed a total of 846 cells.
+
+11.22.3. Executing OPT_RMDFF pass (remove dff with constant values).
+
+11.22.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+Removed 312 unused cells and 3043 unused wires.
+<suppressed ~315 debug messages>
+
+11.22.5. Finished fast OPT passes.
+
+11.23. Executing ABC pass (technology mapping using ABC).
+
+11.23.1. Extracting gate netlist of module `$paramod\peripheral_decoder\PERIPH_BASE=805306368' to `<abc-temp-dir>/input.blif'..
+Extracted 61 gates and 122 wires to a netlist network with 59 inputs and 35 outputs.
+
+11.23.1.1. Executing ABC.
+Running ABC command: berkeley-abc -s -f <abc-temp-dir>/abc.script 2>&1
+ABC: ABC command line: "source <abc-temp-dir>/abc.script".
+ABC: 
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: Entered genlib library with 17 gates from file "<abc-temp-dir>/stdcells.genlib".
+ABC: + strash 
+ABC: + dretime 
+ABC: + retime 
+ABC: + map 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+11.23.1.2. Re-integrating ABC results.
+ABC RESULTS:            ANDNOT cells:       35
+ABC RESULTS:              NAND cells:        1
+ABC RESULTS:                OR cells:       22
+ABC RESULTS:        internal signals:       28
+ABC RESULTS:           input signals:       59
+ABC RESULTS:          output signals:       35
+Removing temp directory.
+
+11.23.2. Extracting gate netlist of module `\pe' to `<abc-temp-dir>/input.blif'..
+Extracted 583 gates and 665 wires to a netlist network with 82 inputs and 64 outputs.
+
+11.23.2.1. Executing ABC.
+Running ABC command: berkeley-abc -s -f <abc-temp-dir>/abc.script 2>&1
+ABC: ABC command line: "source <abc-temp-dir>/abc.script".
+ABC: 
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: Entered genlib library with 17 gates from file "<abc-temp-dir>/stdcells.genlib".
+ABC: + strash 
+ABC: + dretime 
+ABC: + retime 
+ABC: + map 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+11.23.2.2. Re-integrating ABC results.
+ABC RESULTS:               AND cells:      107
+ABC RESULTS:            ANDNOT cells:       63
+ABC RESULTS:              AOI3 cells:       43
+ABC RESULTS:               MUX cells:       64
+ABC RESULTS:              NAND cells:       15
+ABC RESULTS:               NOR cells:       22
+ABC RESULTS:               NOT cells:       26
+ABC RESULTS:              OAI3 cells:       16
+ABC RESULTS:                OR cells:       23
+ABC RESULTS:             ORNOT cells:        5
+ABC RESULTS:              XNOR cells:       55
+ABC RESULTS:               XOR cells:      112
+ABC RESULTS:        internal signals:      519
+ABC RESULTS:           input signals:       82
+ABC RESULTS:          output signals:       64
+Removing temp directory.
+
+11.23.3. Extracting gate netlist of module `\systolic_accel_top' to `<abc-temp-dir>/input.blif'..
+Extracted 0 gates and 0 wires to a netlist network with 0 inputs and 0 outputs.
+Don't call ABC as there is nothing to map.
+Removing temp directory.
+
+11.23.4. Extracting gate netlist of module `\systolic_array' to `<abc-temp-dir>/input.blif'..
+Extracted 5450 gates and 6862 wires to a netlist network with 1410 inputs and 881 outputs.
+
+11.23.4.1. Executing ABC.
+Running ABC command: berkeley-abc -s -f <abc-temp-dir>/abc.script 2>&1
+ABC: ABC command line: "source <abc-temp-dir>/abc.script".
+ABC: 
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: Entered genlib library with 17 gates from file "<abc-temp-dir>/stdcells.genlib".
+ABC: + strash 
+ABC: + dretime 
+ABC: + retime 
+ABC: + map 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+11.23.4.2. Re-integrating ABC results.
+ABC RESULTS:               AND cells:       62
+ABC RESULTS:            ANDNOT cells:      301
+ABC RESULTS:              AOI3 cells:       69
+ABC RESULTS:              AOI4 cells:      295
+ABC RESULTS:               MUX cells:     2118
+ABC RESULTS:              NAND cells:      215
+ABC RESULTS:               NOR cells:       47
+ABC RESULTS:               NOT cells:      403
+ABC RESULTS:              OAI3 cells:      133
+ABC RESULTS:              OAI4 cells:      239
+ABC RESULTS:                OR cells:      344
+ABC RESULTS:             ORNOT cells:      160
+ABC RESULTS:              XNOR cells:        3
+ABC RESULTS:               XOR cells:       10
+ABC RESULTS:        internal signals:     4571
+ABC RESULTS:           input signals:     1410
+ABC RESULTS:          output signals:      881
+Removing temp directory.
+
+11.24. Executing OPT pass (performing simple optimizations).
+
+11.24.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\peripheral_decoder\PERIPH_BASE=805306368.
+Optimizing module pe.
+<suppressed ~48 debug messages>
+Optimizing module systolic_accel_top.
+Optimizing module systolic_array.
+<suppressed ~801 debug messages>
+
+11.24.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\peripheral_decoder\PERIPH_BASE=805306368'.
+Finding identical cells in module `\pe'.
+Finding identical cells in module `\systolic_accel_top'.
+Finding identical cells in module `\systolic_array'.
+<suppressed ~54 debug messages>
+Removed a total of 18 cells.
+
+11.24.3. Executing OPT_RMDFF pass (remove dff with constant values).
+
+11.24.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+Finding unused cells or wires in module \pe..
+Finding unused cells or wires in module \systolic_accel_top..
+Finding unused cells or wires in module \systolic_array..
+Removed 4 unused cells and 3563 unused wires.
+<suppressed ~8 debug messages>
+
+11.24.5. Finished fast OPT passes.
+
+11.25. Executing HIERARCHY pass (managing design hierarchy).
+
+11.25.1. Analyzing design hierarchy..
+Top module:  \systolic_accel_top
+Used module:     $paramod\peripheral_decoder\PERIPH_BASE=805306368
+Used module:     \systolic_array
+Used module:         \pe
+
+11.25.2. Analyzing design hierarchy..
+Top module:  \systolic_accel_top
+Used module:     $paramod\peripheral_decoder\PERIPH_BASE=805306368
+Used module:     \systolic_array
+Used module:         \pe
+Removed 0 unused modules.
+
+11.26. Printing statistics.
+
+=== $paramod\peripheral_decoder\PERIPH_BASE=805306368 ===
+
+   Number of wires:                 41
+   Number of wire bits:            234
+   Number of public wires:          16
+   Number of public wire bits:     178
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 91
+     $_ANDNOT_                      35
+     $_DFF_PN0_                     33
+     $_NAND_                         1
+     $_OR_                          22
+
+=== pe ===
+
+   Number of wires:                499
+   Number of wire bits:            633
+   Number of public wires:          10
+   Number of public wire bits:      84
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                614
+     $_ANDNOT_                      63
+     $_AND_                        107
+     $_AOI3_                        43
+     $_DFF_PN0_                     65
+     $_MUX_                         64
+     $_NAND_                        15
+     $_NOR_                         22
+     $_NOT_                         24
+     $_OAI3_                        16
+     $_ORNOT_                        5
+     $_OR_                          23
+     $_XNOR_                        55
+     $_XOR_                        112
+
+=== systolic_accel_top ===
+
+   Number of wires:                 16
+   Number of wire bits:            178
+   Number of public wires:          16
+   Number of public wire bits:     178
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  2
+     $paramod\peripheral_decoder\PERIPH_BASE=805306368      1
+     systolic_array                  1
+
+=== systolic_array ===
+
+   Number of wires:               3698
+   Number of wire bits:           6201
+   Number of public wires:         131
+   Number of public wire bits:    1822
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               5276
+     $_ANDNOT_                     298
+     $_AND_                         60
+     $_AOI3_                        67
+     $_AOI4_                       295
+     $_DFF_PN0_                    368
+     $_DFF_PN1_                      1
+     $_DFF_P_                      512
+     $_MUX_                       2118
+     $_NAND_                       213
+     $_NOR_                         44
+     $_NOT_                        399
+     $_OAI3_                       132
+     $_OAI4_                       239
+     $_ORNOT_                      160
+     $_OR_                         342
+     $_XNOR_                         3
+     $_XOR_                          9
+     pe                             16
+
+=== design hierarchy ===
+
+   systolic_accel_top                1
+     $paramod\peripheral_decoder\PERIPH_BASE=805306368      1
+     systolic_array                  1
+       pe                           16
+
+   Number of wires:              11739
+   Number of wire bits:          16741
+   Number of public wires:         323
+   Number of public wire bits:    3522
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:              15175
+     $_ANDNOT_                    1341
+     $_AND_                       1772
+     $_AOI3_                       755
+     $_AOI4_                       295
+     $_DFF_PN0_                   1441
+     $_DFF_PN1_                      1
+     $_DFF_P_                      512
+     $_MUX_                       3142
+     $_NAND_                       454
+     $_NOR_                        396
+     $_NOT_                        783
+     $_OAI3_                       388
+     $_OAI4_                       239
+     $_ORNOT_                      240
+     $_OR_                         732
+     $_XNOR_                       883
+     $_XOR_                       1801
+
+11.27. Executing CHECK pass (checking for obvious problems).
+checking module $paramod\peripheral_decoder\PERIPH_BASE=805306368..
+checking module pe..
+checking module systolic_accel_top..
+checking module systolic_array..
+found and reported 0 problems.
+
+12. Printing statistics.
+
+=== $paramod\peripheral_decoder\PERIPH_BASE=805306368 ===
+
+   Number of wires:                 41
+   Number of wire bits:            234
+   Number of public wires:          16
+   Number of public wire bits:     178
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 91
+     $_ANDNOT_                      35
+     $_DFF_PN0_                     33
+     $_NAND_                         1
+     $_OR_                          22
+
+=== pe ===
+
+   Number of wires:                499
+   Number of wire bits:            633
+   Number of public wires:          10
+   Number of public wire bits:      84
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                614
+     $_ANDNOT_                      63
+     $_AND_                        107
+     $_AOI3_                        43
+     $_DFF_PN0_                     65
+     $_MUX_                         64
+     $_NAND_                        15
+     $_NOR_                         22
+     $_NOT_                         24
+     $_OAI3_                        16
+     $_ORNOT_                        5
+     $_OR_                          23
+     $_XNOR_                        55
+     $_XOR_                        112
+
+=== systolic_accel_top ===
+
+   Number of wires:                 16
+   Number of wire bits:            178
+   Number of public wires:          16
+   Number of public wire bits:     178
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  2
+     $paramod\peripheral_decoder\PERIPH_BASE=805306368      1
+     systolic_array                  1
+
+=== systolic_array ===
+
+   Number of wires:               3698
+   Number of wire bits:           6201
+   Number of public wires:         131
+   Number of public wire bits:    1822
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               5276
+     $_ANDNOT_                     298
+     $_AND_                         60
+     $_AOI3_                        67
+     $_AOI4_                       295
+     $_DFF_PN0_                    368
+     $_DFF_PN1_                      1
+     $_DFF_P_                      512
+     $_MUX_                       2118
+     $_NAND_                       213
+     $_NOR_                         44
+     $_NOT_                        399
+     $_OAI3_                       132
+     $_OAI4_                       239
+     $_ORNOT_                      160
+     $_OR_                         342
+     $_XNOR_                         3
+     $_XOR_                          9
+     pe                             16
+
+=== design hierarchy ===
+
+   systolic_accel_top                1
+     $paramod\peripheral_decoder\PERIPH_BASE=805306368      1
+     systolic_array                  1
+       pe                           16
+
+   Number of wires:              11739
+   Number of wire bits:          16741
+   Number of public wires:         323
+   Number of public wire bits:    3522
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:              15175
+     $_ANDNOT_                    1341
+     $_AND_                       1772
+     $_AOI3_                       755
+     $_AOI4_                       295
+     $_DFF_PN0_                   1441
+     $_DFF_PN1_                      1
+     $_DFF_P_                      512
+     $_MUX_                       3142
+     $_NAND_                       454
+     $_NOR_                        396
+     $_NOT_                        783
+     $_OAI3_                       388
+     $_OAI4_                       239
+     $_ORNOT_                      240
+     $_OR_                         732
+     $_XNOR_                       883
+     $_XOR_                       1801
+
+Warnings: 5 unique messages, 5 total
+End of script. Logfile hash: 16dd254599
+CPU: user 11.14s system 0.21s, MEM: 53.91 MB total, 45.50 MB resident
+Yosys 0.9 (git sha1 1979e0b)
+Time spent: 23% 26x opt_merge (2 sec), 21% 29x opt_clean (2 sec), ...
